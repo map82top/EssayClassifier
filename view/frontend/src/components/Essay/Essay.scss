@@ -1,0 +1,135 @@
+@use "src/styles/colors" as colors;
+
+.essay {
+  width: 99.7%;
+  height: max-content;
+  box-shadow: 0 0 2px rgba(50, 50, 50, 0.5);
+  background-color: white;
+  border-bottom-left-radius: 6%;
+  border-bottom-right-radius: 6%;
+  //border: 1px solid white;
+  //background-color: #6949D7;
+
+  &-header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 5.8vh;
+    border-bottom: 2px solid colors.$highlight-border-color;
+    border-bottom-left-radius: 8%;
+    border-bottom-right-radius: 8%;
+    //box-shadow: -2px 2px 2px #6949d7;
+
+    &-collapse {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      &-icon {
+        transition: transform .2s;
+        font-size: 1.5em;
+        margin: 0 0.5vw;
+      }
+
+      &-begin-essay {
+        transition: all 0.2s linear;
+        overflow: hidden;
+        width: 60%;
+        font-size: 1.2em;
+        white-space: nowrap;
+        background: linear-gradient(to right, black, transparent);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      &-tags {
+        margin: 10%;
+        width: 100%;
+
+        &-item {
+          width: max-content;
+          height: max-content;
+          font-size: 15px;
+          margin-bottom: 0.1vh;
+        }
+      }
+    }
+
+    &-control {
+      display: none;
+      transition: all 0.3s;
+      flex: 0;
+
+      &-lecture-checkbox {
+        white-space: nowrap;
+      }
+    }
+
+    &-id {
+      order: 999;
+      margin-left: auto;
+      height: 100%;
+      width: 6vh;
+      border: solid 2px colors.$highlight-border-color;
+      //background: linear-gradient(to right top, #b149d7, #6949d7);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &-text {
+        margin: 0;
+        color: black;
+        font-size: 20px;
+      }
+    }
+
+  }
+
+  &-content {
+    transition: all 0.2s linear;
+    height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background-color: white;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+
+    &-essay {
+      font-size: 16px;
+      max-height: inherit;
+      transition: width 0.3s linear;
+      flex: 1;
+      margin: 1% 1% 1% 1%;
+      margin-bottom: 6px;
+    }
+
+    &-lecture {
+      font-size: 16px;
+      transition: all 0.3s linear;
+      display: none;
+      flex: 0;
+      margin-bottom: 6px;
+    }
+  }
+}
+
+.icon-open {
+  transform: rotate(90deg);
+}
+
+.control-visible {
+  flex: 2;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  display: flex;
+}
+
+.lecture-visible {
+  display: block;
+  flex: 1;
+  margin: 1% 1% 1% 1%;
+}

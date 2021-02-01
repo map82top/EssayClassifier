@@ -1,8 +1,9 @@
 import React, {useRef, useState} from "react";
-import "./DocumentUpload.scss";
+import "./_style.scss";
 import {Button} from "antd";
 import {InboxOutlined, FileOutlined, DeleteOutlined} from "@ant-design/icons";
-import {action, observable} from "mobx";
+import cn from "classnames";
+
 const DocumentUpload = (props) => {
     const [selected, setSelected] = useState(false);
     const [fileName, setFileName] = useState(null);
@@ -25,10 +26,15 @@ const DocumentUpload = (props) => {
     }
 
     return (
-            <div>
+            <div className={cn("upload-input", props.className)}>
+                {
+                    props.description ? (
+                        <p className="upload-input-title">{props.description}</p>
+                    )   : ''
+                }
                 {
                     !selected ? (
-                        <div className="upload-element" onClick={handlerClickOnElement}>
+                        <div className="upload-input-element" onClick={handlerClickOnElement}>
                             <input
                                 type="file"
                                 style={{display: 'none'}}
@@ -36,21 +42,21 @@ const DocumentUpload = (props) => {
                                 ref={uploadInput}
                                 accept={props.accept}
                             />
-                            <p className="upload-element-icon">
+                            <p className="upload-input-element-icon">
                                 <InboxOutlined />
                             </p>
-                            <p className="upload-element-description">Нажмите или перетащите файл в это окно для загрузки</p>
+                            <p className="upload-input-element-tip">Нажмите или перетащите файл в это окно для загрузки</p>
                         </div>
                     ) : (
-                        <div className="upload-item">
-                            <div className="upload-item-description">
-                                <FileOutlined className="upload-item-description-icon"/>
-                                <p className="upload-item-description-name">{fileName}</p>
+                        <div className="upload-input-file">
+                            <div className="upload-input-file-description">
+                                <FileOutlined className="upload-input-file-description-icon"/>
+                                <p className="upload-input-file-description-name">{fileName}</p>
                             </div>
-                            <div className="upload-item-unvisible"></div>
+                            <div className="flex-separator"/>
 
                             <Button
-                                className="upload-item-delete"
+                                className="upload-input-file-delete"
                                 onClick={deleteItemHandler}
                                 icon={<DeleteOutlined />}
                             />

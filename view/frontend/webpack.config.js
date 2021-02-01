@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 
 var SRC = path.resolve(__dirname, 'src/assets');
 const PUBLIC_PATH = '/';
@@ -34,9 +33,17 @@ module.exports = {
                 test: /\.(s*)css$/,
                 include: /src/,
                 use: [
-                    MiniCSSExtractPlugin.loader,
+                    'style-loader',
                     'css-loader',
-                    'sass-loader'
+                    'sass-loader',
+                    {
+                        loader: 'sass-resources-loader',
+                        options: {
+                            resources: [
+                                path.resolve(__dirname, 'src/styles/index.scss')
+                            ]
+                        }
+                    }
                 ]
             }, {
                 test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -52,8 +59,5 @@ module.exports = {
             filename: "index.html",
             title: "Learning Webpack"
         }),
-        new MiniCSSExtractPlugin({
-            filename: 'style.css'
-        }),
-    ]
+    ],
 }

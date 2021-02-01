@@ -1,0 +1,33 @@
+.report {
+  overflow-y: scroll;
+
+  &-loading {
+    @include column-flex($justify-content: center);
+    height: 80vh;
+
+    &-indicator {
+      font-size: 1.3rem;
+    }
+  }
+
+  &-header {
+    margin: 1%;
+    display: flex;
+    flex-direction: row;
+    width: 90vw;
+    height: 4vh;
+
+    &-control-item {
+      margin-right: 5%;
+      font-style: italic;
+    }
+  }
+
+  &-body {
+    overflow-y: auto;
+  }
+}
+
+.ant-spin-dot {
+  font-size: 3rem;
+}

@@ -19,7 +19,6 @@ const stores = {
     routing: routingStore,
 }
 
-
 const browserHistory = createBrowserHistory();
 const history = syncHistoryWithStore(browserHistory, routingStore);
 
@@ -35,10 +34,10 @@ const App = (props) => {
     }, [])
     return (
             <Switch>
-                <Route path="/">
+                <Route path="/report">
                     <ResultPage/>
                 </Route>
-                <Route path="/report">
+                <Route path="/">
                     <UploadPage/>
                 </Route>
             </Switch>

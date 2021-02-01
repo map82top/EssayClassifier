@@ -1,11 +1,8 @@
-@import '~antd/dist/antd.css';
-@import "fonts.scss";
-
-html,
-body,
-#app {
-  height: 100%;
-  font-family: 'Verdana', 'Times New Roman', 'Impact', sans-serif;
-  font-size: 14px;
-  overflow: hidden;
-}
+@import "reset";
+@import "base";
+@import "colors";
+@import "variables";
+@import "mixins";
+@import "scrollbar";
+@import "components";
+@import "~antd/dist/antd.css";

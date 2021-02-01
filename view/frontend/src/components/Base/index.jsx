@@ -1,19 +1,17 @@
 import React from 'react';
-import { Layout } from 'antd';
-import "./Base.scss"
+import "./_style.scss"
 import cn from "classnames";
-const {Header, Footer, Content} = Layout;
 
 const Index = ({className, children}) => {
     return (
-        <Layout>
-            <Header className="header">
+        <>
+            <div className="header">
                 <div className="header-logo">Site Watcher</div>
-            </Header>
-            <Content className={cn("content", className)}>
+            </div>
+            <div className={cn("content", className)}>
                 {children}
-            </Content>
-        </Layout>
+            </div>
+        </>
     )
 };
 

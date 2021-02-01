@@ -1,0 +1,28 @@
+%base-header {
+  height: 7vh;
+  @include header-gradient();
+  @include row-flex();
+}
+
+%base-logo {
+  color: base-color('text');
+  font-style: italic;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+
+.header {
+  @extend %base-header;
+
+  &-logo {
+    @extend %base-logo;
+
+    margin-left: 4%;
+    font-size: 1.4rem;
+  }
+}
+
+.content {
+  background-color: base-color('background');
+}

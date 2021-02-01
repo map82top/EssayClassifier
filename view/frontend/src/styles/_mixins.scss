@@ -1,0 +1,56 @@
+@import "variables";
+
+@mixin row-flex($justify-content: flex-start, $align-items: center) {
+  display: flex;
+  flex-direction: row;
+  justify-content: $justify-content;
+  align-items: $align-items;
+
+  .flex-separator {
+      visibility: hidden;
+      flex-grow: 1;
+  }
+}
+
+@mixin column-flex($justify-content: flex-start, $align-items: center) {
+  display: flex;
+  flex-direction: column;
+  justify-content: $justify-content;
+  align-items: $align-items;
+}
+
+@mixin container-decoration($shadow-color: base-color('shadow'), $container-margin-bottom: $collapse-container-bottom-indent) {
+  box-shadow: 1px 1px 2px 1px $shadow-color;
+  border-radius: $default-border-radius;
+  margin-bottom: $container-margin-bottom;
+}
+
+@mixin text-decoration($font-size: 1rem, $color: base-color('text'), $bgcolor: inherit) {
+  padding: $default-text-padding;
+  color: $color;
+  margin: $default-container-margin;
+  background-color: $bgcolor;
+  font-size: $font-size;
+}
+
+@mixin header-gradient($base-color: base-color('primary')) {
+   background: linear-gradient(45deg, $base-color, mix(red, $base-color, 25%));
+}
+
+@mixin animation-arrow-icon($angle, $font-size: 1.2rem) {
+   transition: transform $default-animation-timeout;
+    font-size: $font-size;
+    padding: 0.6rem;
+
+    &--open {
+      transform: rotate(-$angle);
+    }
+}
+
+@mixin text-disappearing($font-size: 1.2rem) {
+    font-size: 1.2rem;
+    white-space: nowrap;
+    background: linear-gradient(to right, black, transparent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

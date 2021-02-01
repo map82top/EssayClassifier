@@ -1,0 +1,33 @@
+@import "variables";
+
+html,
+body,
+#app {
+  height: 100%;
+  font-family: 'Verdana', 'Times New Roman', 'Impact', sans-serif;
+}
+
+body > #app {
+  height: auto;
+  min-height: 100%;
+}
+
+body {
+  font-size: $font-size-base;
+}
+
+body,
+input,
+button,
+textarea {
+  -webkit-appearance: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+   user-select: none;
+}

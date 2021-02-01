@@ -1,0 +1,16 @@
+$base-colors: (
+  'primary': #2196F3,
+  'dark-primary': #1976D2,
+  'light-primary': #BBDEFB,
+  'accent': #009688,
+  'devider': #BDBDBD,
+  'background': #FFFFFF,
+        'text': #FFFFFF,
+  'primary-text': #212121,
+  'secondary-text': #757575,
+        'shadow': #757575
+);
+
+@function base-color($key: 'primary') {
+  @return map-get($base-colors, $key);
+}

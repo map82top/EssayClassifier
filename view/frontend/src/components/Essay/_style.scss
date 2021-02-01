@@ -1,0 +1,133 @@
+@import "../EssayGroup/style";
+
+$essay-header-height: 5.8vh;
+$border-radius-for-rounding-effect: 8%;
+
+%bottom-header-highlight {
+    border-bottom: 2px solid base-color('primary');
+    border-bottom-left-radius: $border-radius-for-rounding-effect;
+    border-bottom-right-radius:$border-radius-for-rounding-effect;
+}
+
+%collapse-text-content {
+    flex: 1;
+    @include text-decoration($font-size: 1.1rem, $color: base-color('primary-dark'));
+    transition: all $default-animation-timeout linear;
+    letter-spacing: normal;
+    font-size: 1.1rem;
+    line-height: 1.3;
+
+    p {
+        width: 60%;
+        margin: 0 auto;
+        text-align: justify;
+    }
+}
+
+.essay {
+  width: inherit;
+  height: max-content;
+  @include container-decoration();
+
+  &-header {
+    @include container-decoration();
+    @include row-flex();
+    @extend  %bottom-header-highlight;
+    width: $max-content-width;
+    height: $essay-header-height;
+    margin-bottom: 6px;
+
+    &-content {
+        width: 100%;
+        @include row-flex();
+
+        &-collapse {
+          @include row-flex();
+
+          &-icon {
+            @include animation-arrow-icon($font-size: 1.5rem, $angle: 90deg);
+          }
+
+          &-begin-essay {
+            transition: all $default-animation-timeout linear;
+            @include text-disappearing();
+          }
+
+          &-tags {
+            margin: $default-container-margin;
+            width: $max-content-width;
+
+            &-item {
+              width: max-content;
+              height: max-content;
+              font-size: 1rem;
+              margin: $default-container-margin;
+            }
+          }
+      }
+
+      &-control {
+        display: none;
+        transition: all $default-animation-timeout;
+        flex: 0;
+
+        &-lecture-checkbox {
+          white-space: nowrap;
+        }
+      }
+    }
+
+    &-id {
+      width: 4vw;
+      height: $essay-header-height - 0.1vh;
+      margin: $default-container-margin;
+      border: solid 2px base-color('primary');
+      border-radius: $default-border-radius;
+      @include row-flex($justify-content: center);
+
+      &-text {
+        @include text-decoration($font-size: 1.5rem, $color: base-color('primary-text'));
+      }
+    }
+
+  }
+
+  &-collapse {
+    @extend %collapse-body;
+    @include column-flex();
+
+    &-content {
+      @include row-flex();
+
+      &-essay {
+        @extend %collapse-text-content;
+      }
+
+      &-lecture {
+        @extend %collapse-text-content;
+      }
+    }
+
+    &-footer {
+      border-top: 1px solid base-color('devider');
+      padding: $default-container-padding;
+      width: $max-content-width;
+      @include row-flex($justify-content: flex-end);
+      margin-right: 1%;
+
+      &-teacher-grade-button {
+        font-size: 1.2rem;
+        width: 11% !important;
+      }
+    }
+  }
+}
+
+.control-visible {
+  flex: 2;
+  @include row-flex($justify-content: flex-end);
+}
+
+.lecture-visible {
+  width: 100% !important;
+}

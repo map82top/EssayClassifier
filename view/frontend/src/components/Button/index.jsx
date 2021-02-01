@@ -1,12 +1,13 @@
 import React from "react";
+import "./_style.scss";
 import cn from "classnames";
-import "./Button.scss"
 
 const Button = (props) => {
     return (
         <button
-            className={cn("button", props.className)}
+            className={cn('button', props.className)}
             onClick={props.clickHandler}
+            style={{visibility: props.hidden ? 'hidden' : 'visible'}}
         >
             {props.name}
         </button>

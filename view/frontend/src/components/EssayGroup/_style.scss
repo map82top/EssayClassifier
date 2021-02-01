@@ -1,0 +1,76 @@
+$essay-margin-devider: 8px;
+$category-header-highlight-intend: 1vw;
+
+%category-header {
+  @include container-decoration();
+  @include row-flex();
+  height: 6vh;
+  margin-bottom: 6px;
+  border-top: 2px solid base-color('devider');
+}
+
+.group {
+  width: 98%;
+  margin: 1% auto 3% auto;
+  padding-bottom: $collapse-container-bottom-indent;
+  @include container-decoration();
+  height: inherit;
+
+  &-description {
+    @include header-gradient();
+    @extend %category-header;
+
+    &-text {
+      @include text-decoration($font-size: 1.3rem);
+    }
+  }
+
+  &-statistic {
+    margin-left: $category-header-highlight-intend;
+    @include container-decoration();
+
+    &-header {
+      @extend %category-header;
+
+      &-text {
+        @include text-decoration($font-size: 1.3rem, $color: base-color('primary-text'));
+      }
+    }
+
+    &-body {
+      @extend %collapse-body;
+      @include column-flex();
+
+      &-text {
+        @include text-decoration($font-size: 1.3rem, $color: base-color('primary-text'));
+      }
+    }
+  }
+
+  &-items {
+    margin-left: $category-header-highlight-intend;
+    @include container-decoration();
+
+    &-header {
+      @extend %category-header;
+
+      &-text {
+         @include text-decoration($font-size: 1.3rem, $color: base-color('primary-text'));
+      }
+    }
+
+    &-body {
+      @extend %collapse-body;
+      @include column-flex($align-items: flex-end);
+
+      &-item {
+        width: 98%;
+        margin-bottom: $essay-margin-devider;
+      }
+    }
+  }
+
+  &-collapse-icon {
+    @include animation-arrow-icon($angle: -180deg, $font-size: 1.5em);
+  }
+}

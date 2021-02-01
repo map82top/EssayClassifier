@@ -161,7 +161,12 @@ def analyze(lecture, essays):
             grade,
             group,
             labels,
-            is_lecture
+            is_lecture,
+            Statistic(
+                essay.num_letters,
+                essay.num_words,
+                essay.num_sentences
+            )
         ))
 
     return graded_essays
@@ -209,6 +214,12 @@ class Label:
     reference: int = None
     probability: int = None
 
+@dataclass
+class Statistic:
+    num_letters: int
+    num_words: int
+    num_sentences: int
+
 
 @dataclass
 class GradedEssay:
@@ -218,6 +229,9 @@ class GradedEssay:
     group: int
     labels: list
     is_lecture: bool
+    statistic: Statistic
+
+
 
 
 

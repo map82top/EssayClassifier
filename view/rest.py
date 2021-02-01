@@ -51,21 +51,21 @@ def index():
 
 @server.route('/upload', methods=['POST'])
 def upload_file():
-    # if 'lecture' not in request.files or 'essays' not in request.files:
-    #     return redirect(request.url)
-    #
-    # lecture = request.files['lecture']
-    # essays = request.files['essays']
-    #
-    # if lecture.filename == '' or essays.filename == '':
-    #     return redirect(request.url)
-    #
-    # lecture = Presentation(lecture)
-    # essays = pd.read_excel(essays)
+    if 'lecture' not in request.files or 'essays' not in request.files:
+        return redirect(request.url)
+
+    lecture = request.files['lecture']
+    essays = request.files['essays']
+
+    if lecture.filename == '' or essays.filename == '':
+        return redirect(request.url)
+
+    lecture = Presentation(lecture)
+    essays = pd.read_excel(essays)
 
     socketio.emit('changed-report-status', json.dumps({'status': 'handling'}))
-    # graded_essays = analyze(lecture, essays)
-    graded_essays = mock_report()
+    graded_essays = analyze(lecture, essays)
+    # graded_essays = mock_report()
     lecture = graded_essays.pop(0)
     response = {
         "lecture": lecture,

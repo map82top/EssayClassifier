@@ -1,5 +1,6 @@
 import React from 'react';
-import "./ComboBox.scss";
+import "./_style.scss";
+import cn from "classnames";
 
 const ComboBox = (props) => {
 
@@ -8,14 +9,14 @@ const ComboBox = (props) => {
     }
 
     return (
-        <div className="combobox-container">
+        <div className={cn("combobox-container", props.className)}>
             <div className="combobox-container-description">
                 {props.description}
             </div>
             <div className="combobox-container-body">
                 <select size={props.size} className="combobox-container-body-combobox" onChange={onChangeHandler}>
                     {
-                        props.options.map((option) => (
+                        props.options && props.options.map((option) => (
                             <option value={option.key} key={option.key}>{option.text}</option>
                         ))
                     }

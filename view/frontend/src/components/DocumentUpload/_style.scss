@@ -1,0 +1,71 @@
+$default-indent: 1%;
+
+%default-upload-input {
+  width: 98% ;
+  height: 10vh;
+  margin: $default-indent auto;
+}
+
+.upload-input {
+  @include container-decoration();
+  margin: $default-indent;
+  padding-bottom: $default-indent;
+  width: $max-content-width;
+
+  &-title {
+    @include text-decoration($font-size: 1.1rem, $color: base-color('secondary-text'));
+
+  }
+
+  &-element {
+    @extend %default-upload-input;
+    @include column-flex($justify-content: center);
+    border: 1px dashed base-color('dark-primary');
+    margin: 1% auto;
+
+    &-icon {
+      font-size: 4rem;
+      color: base-color('primary');
+    }
+
+    &-tip {
+      font-style: italic;
+      color: base-color('secondary-text')
+    }
+  }
+
+  &-file {
+    @extend %default-upload-input;
+    border: 1px solid base-color('primary');
+    @include row-flex();
+
+    &-description {
+      @include row-flex($justify-content: center);
+      margin-left: $default-indent;
+
+      &-name {
+        font-size: 1.1rem;
+        margin-left: 2vw;
+      }
+
+      &-icon {
+        font-size: 3rem;
+        color: base-color('primary');
+      }
+    }
+
+    &-delete {
+      margin-right: $default-indent;
+      border: none;
+      background-color: transparent;
+
+      svg {
+        font-size: 1.6rem;
+      }
+
+      &:hover {
+         background-color: transparent;
+      }
+    }
+  }
+}

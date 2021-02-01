@@ -1,0 +1,26 @@
+.upload {
+  &-title {
+     @include text-decoration($font-size: 1.5rem, $color: base-color('primary-text'));
+      text-align: center;
+  }
+
+  &-form {
+     @include container-decoration();
+      @include column-flex();
+      width: 80%;
+      height: 80vh;
+      margin: 0.5% auto;
+      padding: 1%;
+
+      &-file {
+        margin-bottom: 2.5%;
+      }
+
+      &-send-button {
+        font-size: 1.4rem;
+        width: 40% !important;
+        order: 999;
+        margin-top: auto;
+      }
+  }
+}

@@ -1,0 +1,16 @@
+.button {
+    background-color: base-color('accent');
+    color: base-color('text');
+    border: none;
+    width: max-content;
+    height: max-content;
+    @include container-decoration();
+    border-radius: $default-border-radius;
+    margin: $default-container-margin;
+    padding: $default-text-padding;
+
+    &:hover {
+      border: none;
+        background-color: mix(white, base-color('accent'), 20%);
+    }
+}

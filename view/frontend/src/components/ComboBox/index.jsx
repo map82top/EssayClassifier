@@ -1,6 +1,8 @@
 import React from 'react';
 import "./_style.scss";
 import cn from "classnames";
+import { Select } from "antd";
+const { Option } = Select;
 
 const ComboBox = (props) => {
 
@@ -16,9 +18,9 @@ const ComboBox = (props) => {
             <div className="combobox-container-body">
                 <select size={props.size} className="combobox-container-body-combobox" onChange={onChangeHandler}>
                     {
-                        props.options && props.options.map((option) => (
-                            <option value={option.key} key={option.key}>{option.text}</option>
-                        ))
+                        props.options && props.options.map(option =>
+                            <option value={option.key}>{option.content}</option>
+                        )
                     }
                 </select>
             </div>

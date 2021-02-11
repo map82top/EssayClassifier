@@ -5,6 +5,7 @@ from analyzer.supervisor import Supervisor
 from analyzer.plagiarism import create_plagiarism_matrix
 from analyzer.similarity import create_similarity_matrix
 from dataclasses import dataclass
+import numpy as np
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -108,7 +109,7 @@ def analyze(lecture, essays):
     plagiarism_matrix = create_plagiarism_matrix(essays)
     similarity_matrix = create_similarity_matrix(essays)
 
-    groups = find_similarity_groups(similarity_matrix)
+    groups = find_similarity_groups_by_rows(similarity_matrix)
 
     graded_essays = []
     for i, essay in enumerate(essays):
@@ -131,7 +132,7 @@ def analyze(lecture, essays):
                 labels.append(
                     Label(LabelType.FAIL)
                 )
-            if plagiarism_score > 10:
+            if plagiarism_score > 25:
                 labels.append(
                     Label(type=LabelType.LECTURE_PLAGIARISM, probability=plagiarism_score)
                 )
@@ -172,15 +173,15 @@ def analyze(lecture, essays):
     return graded_essays
 
 
-def find_similarity_groups(similarity_matrix):
+def find_similarity_groups_by_rows(similarity_matrix):
     count_texts = similarity_matrix.shape[0]
     essays_idx = [i for i in range(1, count_texts)]
-    essay_group = dict()
+    group_by_essay = dict()
     current_group_id = 1
 
     while len(essays_idx) > 0:
         idx = essays_idx.pop(0)
-        essay_group[idx] = current_group_id
+        group_by_essay[idx] = current_group_id
 
         #find all siblings
         for j in range(idx + 1, similarity_matrix.shape[0]):
@@ -188,11 +189,43 @@ def find_similarity_groups(similarity_matrix):
                 if j not in essays_idx:
                     continue
                 essays_idx.remove(j)
-                essay_group[j] = current_group_id
+                group_by_essay[j] = current_group_id
 
         current_group_id += 1
 
-    return essay_group
+    return group_by_essay
+
+def find_similarity_groups_by_mean_group_similarity(similarity_matrix):
+    count_texts = similarity_matrix.shape[0]
+    essays_idx = [i for i in range(1, count_texts)]
+    group_by_essay = dict()
+    essays_by_group = dict()
+    current_group_id = 0
+    essays_by_group.keys()
+
+    while len(essays_idx) > 0:
+        idx = essays_idx.pop(0)
+        group_id = find_nearest_existed_group(idx, similarity_matrix, essays_by_group)
+        if group_id is not None:
+            essays_by_group[group_id].append(idx)
+            group_by_essay[idx] = group_id
+        else:
+            current_group_id += 1
+            essays_by_group[current_group_id] = [idx]
+            group_by_essay[idx] = current_group_id
+
+    return group_by_essay
+
+def find_nearest_existed_group(idx, similarity_matrix, essays_by_group):
+    nearest_group_id = None
+    max_mean = 0
+    for group_id in essays_by_group.keys():
+        mean_similarity = np.array([similarity_matrix[idx, j] for j in essays_by_group[group_id]]).mean()
+        if mean_similarity >= 8 and max_mean < mean_similarity:
+            nearest_group_id = group_id
+            max_mean = mean_similarity
+
+    return nearest_group_id
 
 
 class GradeType(str, enum.Enum):

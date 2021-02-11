@@ -4,18 +4,19 @@ nltk.download('stopwords')
 import pandas as pd
 from lecture_reader import LectureReader
 from supervisor import Supervisor
-from plagiat import create_plagiarism_matrix
+from plagiarism import create_plagiarism_matrix
 from similarity import create_similarity_matrix
+import numpy as np
 
-path_to_lecture = "../presentation2.pptx"
-path_to_essays = "../esse2.xlsx"
+path_to_lecture = "/home/ilya/Documents/Diplom/EssayClassifier/presentation.pptx"
+path_to_essays = "/home/ilya/Documents/Diplom/EssayClassifier/esse.xlsx"
 
 lecture_reader = LectureReader()
 supervisor = Supervisor()
 
 
 essays = pd.read_excel(path_to_essays)['essay'].tolist()
-essays.insert(0, lecture_reader.read(path_to_lecture))
+essays.insert(0, lecture_reader.read_from_file(path_to_lecture))
 
 essays = [supervisor.markup(essay) for essay in essays]
 
@@ -28,6 +29,39 @@ plt.show()
 similarity_matrix = create_similarity_matrix(essays)
 sns.heatmap(similarity_matrix)
 plt.show()
+
+def find_similarity_groups(similarity_matrix):
+    count_texts = similarity_matrix.shape[0]
+    essays_idx = [i for i in range(1, count_texts)]
+    group_by_essay = dict()
+    essays_by_group = dict()
+    current_group_id = 0
+    essays_by_group.keys()
+
+    while len(essays_idx) > 0:
+        idx = essays_idx.pop(0)
+        group_id = find_nearest_existed_group(idx, similarity_matrix, essays_by_group)
+        if group_id is not None:
+            essays_by_group[group_id].append(idx)
+            group_by_essay[idx] = group_id
+        else:
+            current_group_id += 1
+            essays_by_group[current_group_id] = [idx]
+            group_by_essay[idx] = current_group_id
+
+    return list(essays_by_group.values())
+
+def find_nearest_existed_group(idx, similarity_matrix, essays_by_group):
+    nearest_group_id = None
+    max_mean = 0
+    for group_id in essays_by_group.keys():
+        groups_similarity = np.asarray([similarity_matrix[idx, j] for j in essays_by_group[group_id]])
+        mean_similarity = groups_similarity.mean()
+        if mean_similarity >= 9 and max_mean < mean_similarity:
+            nearest_group_id = group_id
+            max_mean = mean_similarity
+
+    return nearest_group_id
 
 
 def find_all_sublings(group, idx):
@@ -42,14 +76,14 @@ def find_all_sublings(group, idx):
 
 
 essays_idx = [i for i in range(1, len(essays))]
-groups = []
+groups = find_similarity_groups(similarity_matrix)
 
-while len(essays_idx) > 0:
-    group = []
-    idx = essays_idx.pop(0)
-    group.append(idx)
-    find_all_sublings(group, idx)
-    groups.append(group)
+# while len(essays_idx) > 0:
+#     group = []
+#     idx = essays_idx.pop(0)
+#     group.append(idx)
+#     find_all_sublings(group, idx)
+#     groups.append(group)
 
 print("Группы сочинений")
 for i in range(len(groups)):

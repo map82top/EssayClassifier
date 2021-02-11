@@ -7,14 +7,12 @@ class ReportStore {
     @observable params = {
         lectureFile: null,
         essaysFile : null,
+        // status : 'handled',
+        // lecture: this.data.lecture,
+        // gradedEssays : this.data.graded_essays,
         status : null,
         lecture: null,
         gradedEssays : [],
-        groupType: 'none'
-    }
-
-    @action setGroupType(groupType) {
-        this.params.groupType = groupType;
     }
 
     @action selectLecture(file) {

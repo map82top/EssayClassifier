@@ -17,15 +17,30 @@
     width: 90vw;
     height: 4vh;
 
-    &-control-item {
-      margin-right: 5%;
-      font-style: italic;
+    &-control {
+      @include row-flex();
+
+      &-item {
+        margin-left: 3vh;
+
+        &-combobox-tag {
+          visibility: hidden;
+
+          &--visible {
+            visibility: visible;
+          }
+        }
+      }
     }
   }
 
   &-body {
     overflow-y: auto;
   }
+}
+
+.tag-group-selector-hiding {
+  visibility: hidden;
 }
 
 .ant-spin-dot {

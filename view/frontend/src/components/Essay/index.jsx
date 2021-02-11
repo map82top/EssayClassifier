@@ -4,7 +4,8 @@ import { Tag, Checkbox } from "antd";
 import { RightOutlined} from "@ant-design/icons";
 import "./_style.scss";
 import { observer, inject } from "mobx-react";
-import { Button, ComboBox, Collapse } from "../../components";
+import { Button, Collapse } from "../../components";
+import { convertLectureTypeToColor, convertLabelToDescription } from "../../utils";
 
 const Essay = (props) => {
     const [open, setOpen] = useState(false);
@@ -36,60 +37,6 @@ const Essay = (props) => {
         return essayId.split('-')[1]
     }
 
-    const covertLectureTypeToColor = (type) => {
-        switch (type) {
-            case 'attention':
-                return 'orange';
-            case 'lecture_plagiarism':
-            case 'essay_plagiarism':
-            case 'fail':
-                return 'red';
-            case 'success':
-                return 'green';
-            case 'teacher-success':
-                return 'cyan';
-            case 'teacher-fail':
-                return 'magenta';
-        }
-    }
-
-    const convertLabelToDescription = (label) => {
-        let base = '';
-        switch (label.type) {
-            case 'attention':
-                base = 'Спорная оценка';
-                break;
-            case 'lecture_plagiarism':
-                base = 'Плагиат лекции';
-                break;
-            case 'essay_plagiarism':
-                base = 'Плагиат эссе';
-                break;
-            case 'fail':
-                base = 'Незачет';
-                break;
-            case 'success':
-                base = 'Зачет';
-                break;
-            case 'teacher-success':
-                base = 'Преподаватель - Зачет';
-                break;
-            case 'teacher-fail':
-                base = 'Преподаватель - Незачет';
-                break;
-        }
-
-        if(label.reference) {
-            base += ` ${label.reference}`;
-        }
-
-        if(label.probability) {
-              base += ` на ${label.probability}%`;
-        }
-
-        return base;
-    }
-
     return (
         <div className={cn("essay", props.className)} key={props.key}>
             <div className="essay-header">
@@ -103,7 +50,7 @@ const Essay = (props) => {
                         >{cutText(props.essay.text)}</Collapse>
                         <div className="essay-header-content-collapse-tags">
                             {props.essay.labels.map(label => (
-                                <Tag color={covertLectureTypeToColor(label.type)} className="essay-header-content-collapse-tags-item">
+                                <Tag color={convertLectureTypeToColor(label.type)} className="essay-header-content-collapse-tags-item">
                                     {convertLabelToDescription(label)}
                                 </Tag>
                             ))}

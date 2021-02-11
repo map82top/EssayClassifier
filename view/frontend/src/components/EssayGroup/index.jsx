@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import cn from "classnames";
 import { DownOutlined } from "@ant-design/icons";
 import { Essay, Collapse } from "../../components";
-import { observer } from "mobx-react";
 import { Statistic, Row, Col, Button } from 'antd';
 import "./_style.scss";
 
@@ -14,7 +13,7 @@ const EssayGroup = (props) => {
 
     useEffect(() => {
         setGroupStatistic(calculateStatistic());
-    }, []);
+    }, [props.essays]);
 
     const collapseHandler = (type) => {
         switch (type) {
@@ -98,10 +97,7 @@ const EssayGroup = (props) => {
                     className={cn("group-items-body")}
                     isOpened={itemsOpen}
                 >
-                    {   props.essays.map(essay => (
-                            <Essay essay={essay} lecture={props.lecture} key={essay.key} className={cn("group-items-body-item")}/>
-                        )
-                    )}
+                    {props.renderedEssays}
                 </Collapse>
             </div>
         </div>

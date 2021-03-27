@@ -1,0 +1,16 @@
+.ftp {
+  @include row-flex();
+
+  &-item {
+    height: 5.5vh;
+    margin-right: 1rem;
+  }
+
+  &-font-type {
+
+  }
+
+  &-font-size {
+
+  }
+}

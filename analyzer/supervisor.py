@@ -10,7 +10,6 @@ class Supervisor:
         self.morph = pymorphy2.MorphAnalyzer()
         self.tokenizer = TweetTokenizer()
 
-
     def markup(self, text):
         statistic = dict()
 
@@ -22,7 +21,6 @@ class Supervisor:
         statistic['morph_tokens'] = [self.morph.parse(token)[0] for token in statistic['tokens']]
 
         return TextMarkup(statistic)
-
 
     def tokenize(self, text):
         tokens = self.tokenizer.tokenize(text)
@@ -64,8 +62,3 @@ class TextMarkup:
     @property
     def num_sentences(self):
         return self.stats['num_sentences']
-
-    def __str__(self):
-        return str(self.stats) + \
-            ", avg_words_per_sentence " + str(self.avg_words_per_sentence) + \
-            ", avg_syllables_per_word " + str(self.avg_syllables_per_word)

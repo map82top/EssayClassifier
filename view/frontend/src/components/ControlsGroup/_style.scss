@@ -1,0 +1,13 @@
+.controls-container {
+  @include column-flex($align-items: flex-start);
+  @include container-decoration();
+  padding: 8px;
+
+  &-group-name {
+    @include text-decoration($font-size: 0.9rem, $color: base-color('secondary-text'));
+  }
+
+  &-controls {
+    @include row-flex($flex-wrap: wrap);
+  }
+}

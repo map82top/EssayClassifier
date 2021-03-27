@@ -1,16 +1,16 @@
 export function convertLectureTypeToColor(type) {
     switch (type) {
-        case 'attention':
+        case 'ATTENTION':
             return 'orange';
-        case 'lecture_plagiarism':
-        case 'essay_plagiarism':
-        case 'fail':
+        case 'LECTURE_PLAGIARISM':
+        case 'ESSAY_PLAGIARISM':
+        case 'FAIL':
             return 'red';
-        case 'success':
+        case 'SUCCESS':
             return 'green';
-        case 'teacher-success':
+        case 'TEACHER_SUCCESS':
             return 'cyan';
-        case 'teacher-fail':
+        case 'TEACHER_FAIL':
             return 'magenta';
     }
 }
@@ -18,31 +18,31 @@ export function convertLectureTypeToColor(type) {
 export function convertLabelToDescription(label) {
     let base = '';
     switch (label.type) {
-        case 'attention':
+        case 'ATTENTION':
             base = 'Спорная оценка';
             break;
-        case 'lecture_plagiarism':
+        case 'LECTURE_PLAGIARISM':
             base = 'Плагиат лекции';
             break;
-        case 'essay_plagiarism':
+        case 'ESSAY_PLAGIARISM':
             base = 'Плагиат эссе';
             break;
-        case 'fail':
+        case 'FAIL':
             base = 'Незачет';
             break;
-        case 'success':
+        case 'SUCCESS':
             base = 'Зачет';
             break;
-        case 'teacher-success':
+        case 'TEACHER_SUCCESS':
             base = 'Преподаватель - Зачет';
             break;
-        case 'teacher-fail':
+        case 'TEACHER_FAIL':
             base = 'Преподаватель - Незачет';
             break;
     }
 
-    if(label.reference) {
-        base += ` ${label.reference}`;
+    if(label.internal_reference) {
+        base += ` ${label.internal_reference}`;
     }
 
     if(label.probability) {

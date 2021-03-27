@@ -1,3 +1,4 @@
 .idea/
 #/view/frontend/static
 /view/frontend/node_modules/
+/venv/

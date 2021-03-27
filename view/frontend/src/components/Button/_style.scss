@@ -1,3 +1,8 @@
+$bs-weight: 1px;
+$bs-radius: 2px;
+$bs-stretching: 2px;
+$bs-color: base-color('shadow');
+
 .button {
     background-color: base-color('accent');
     color: base-color('text');
@@ -7,10 +12,13 @@
     @include container-decoration();
     border-radius: $default-border-radius;
     margin: $default-container-margin;
-    padding: $default-text-padding;
+    padding: 0.8rem;
+    outline: none;
 
     &:hover {
-      border: none;
-        background-color: mix(white, base-color('accent'), 20%);
+        outline: none;
+        box-shadow: -$bs-weight $bs-weight $bs-radius $bs-stretching $bs-color,
+            $bs-weight -$bs-weight $bs-radius $bs-stretching $bs-color;
+        background-color: mix(white, base-color('accent'), 10%);
     }
 }

@@ -1,3 +1,5 @@
+$group-margin: 0.5rem;
+
 .report {
   overflow-y: scroll;
 
@@ -14,22 +16,15 @@
     margin: 1%;
     display: flex;
     flex-direction: row;
-    width: 90vw;
-    height: 4vh;
+    width: 98%;
+    height: max-content;
 
     &-control {
-      @include row-flex();
+      @include row-flex($flex-wrap: wrap);
 
       &-item {
-        margin-left: 3vh;
-
-        &-combobox-tag {
-          visibility: hidden;
-
-          &--visible {
-            visibility: visible;
-          }
-        }
+        margin-right: $group-margin;
+        margin-bottom: $group-margin;
       }
     }
   }
@@ -37,10 +32,24 @@
   &-body {
     overflow-y: auto;
   }
+
+  &-footer {
+    @include row-flex($justify-content: center);
+    margin: 1vh auto;
+
+    &-end-button {
+      font-size: 1.3rem;
+      width: 30% !important;
+    }
+  }
 }
 
-.tag-group-selector-hiding {
-  visibility: hidden;
+.group-custom-header {
+  @include row-flex();
+
+  &-name {
+    @include text-decoration($font-size: 1.3rem);
+  }
 }
 
 .ant-spin-dot {

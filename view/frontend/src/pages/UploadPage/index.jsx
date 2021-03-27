@@ -14,8 +14,8 @@ const Index = (props) =>  {
            report.updateStatus(object_data.status);
        });
 
-        if(report.sendOnEvaluation()) {
-             replace('/report');
+        if(report.startEvaluation()) {
+            replace('/report');
         }
     }
 

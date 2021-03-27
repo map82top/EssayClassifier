@@ -1,32 +1,33 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const WebpackNotifierPlugin = require('webpack-notifier')
-
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const WebpackNotifierPlugin = require('webpack-notifier');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 var SRC = path.resolve(__dirname, 'src/assets');
 const PUBLIC_PATH = '/';
 
 module.exports = (env, argv) => {
     const modeEnv = argv.mode || 'development'
     const isProd = modeEnv === 'production'
-    const optimizations = {
-        splitChunks: {
-            cacheGroups: {
-                vendors: {
-                    name: 'vendors',
-                    test: /node_modules/,
-                    chunks: 'all',
-                    enforce: true,
-                },
-            },
-        },
-        minimizer: [],
-    }
+    // const optimizations = {
+    //     splitChunks: {
+    //         cacheGroups: {
+    //             vendors: {
+    //                 name: 'vendors',
+    //                 test: /node_modules/,
+    //                 chunks: 'all',
+    //                 enforce: true,
+    //             },
+    //         },
+    //     },
+    //     minimizer: [],
+    // }
 
-    if (isProd) {
-        optimizations.minimizer.push(new UglifyJsPlugin())
-    }
+    // if (isProd) {
+    //     optimizations.minimizer.push(new UglifyJsPlugin())
+    // }
 
     return {
       entry: {
@@ -89,6 +90,7 @@ module.exports = (env, argv) => {
             ]
         },
         plugins: [
+
             new WebpackNotifierPlugin({ alwaysNotify: false }),
             new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
             new HtmlWebpackPlugin({
@@ -96,10 +98,14 @@ module.exports = (env, argv) => {
                 filename: "index.html",
                 title: "Learning Webpack"
             }),
+            new BundleAnalyzerPlugin(),
+            new webpack.DefinePlugin({
+             'process.env.NODE_ENV': '"production"'
+            }),
         ],
         performance: {
             hints: false,
         },
-        optimization: optimizations,
+        // optimization: optimizations,
     }
 }

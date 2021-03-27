@@ -1,7 +1,7 @@
 import {http} from "../utils";
 
 class EstimatorService {
-    evaluateEssays(lecture, essays) {
+    startEvaluation(lecture, essays) {
         let formData = new FormData();
         formData.append('lecture', lecture);
         formData.append('essays', essays);
@@ -12,6 +12,11 @@ class EstimatorService {
             }
         });
     }
+
+    endEvaluation(report) {
+        return http.post('/end_check', report)
+    }
+
 }
 
 export default new EstimatorService();

@@ -3,6 +3,7 @@ import binascii
 
 functors_pos = {'NOUN', 'VERB', 'INFN'}
 
+
 def create_plagiarism_matrix(essays):
     shingle_essays = []
 
@@ -36,6 +37,7 @@ def genshingle(tokens):
         shingles.append(binascii.crc32(' '.join([x for x in tokens[i:i + shingle_len]]).encode('utf-8')))
 
     return shingles
+
 
 def compare(shingles_first_text, shingles_second_text):
     same = 0

@@ -1,58 +1,56 @@
 import React, { useState, useEffect } from "react";
-import {Base, ComboBox, Essay, EssayGroup} from "../../components";
-import { Spin } from 'antd';
+import {Base, Essay, EssayGroup, Button, FontTunePanel, EssayGroupPanel } from "../../components";
+import { Spin, Tag } from 'antd';
 import './_style.scss';
 import {inject, observer} from "mobx-react";
 import cn from "classnames";
-import { convertLectureTypeToColor, convertLabelToDescription } from "../../utils";
-import { Tag } from "antd";
+import {convertLabelToDescription, convertLectureTypeToColor, makeNotification} from "../../utils";
 
 const index = (props) => {
-    // const [groups, setGroups] = useState([]);
-    const [grouping, setGrouping] = useState({groupType: 'none', tag: 'attention'});
+    const [grouping, setGrouping] = useState({
+        group_type: 'none',
+        group_tag: 'ATTENTION'
+    });
     const [renderedEssays, setRenderedEssays] = useState([]);
+    const [textStyle, setTextStyle] = useState({
+        font_type: "VERDANA",
+        font_size: 18,
+        text_width: 60
+    });
+
     const report = props.report.params;
-
-    // const createTagElement = (type) => {
-    //     return (
-    //         <Tag color={convertLectureTypeToColor(type)}>
-    //             {convertLabelToDescription({ type: type })}
-    //         </Tag>
-    //     )
-    // }
-
-    const groupTypeOptions = [
-        { key: "none", content: "Нет"},
-        { key: "similarity", content: "По подобию"},
-        { key: "tag", content: "По тегу"},
-    ]
-
-    const tagOptions = [
-        { key: "attention", content: "Спорная оценка"},
-        { key: "success", content: "Зачет"},
-        { key: "fail", content: "Незачет"},
-        { key: "teacher-success", content:"Преподаватель - Зачет"},
-        { key: "teacher-fail", content:  "Преподаватель - Незачет"},
-        { key: "lecture_plagiarism", content: "Плагиат лекции"},
-        { key: "essay_plagiarism", content: "Плагиет эссе"},
-    ]
 
     useEffect(() => {
         setRenderedEssays(
-            report.gradedEssays.map(essay =>
-                (<Essay essay={essay} lecture={props.lecture} key={essay.key} className="group-items-body-item"/>)
+            report.essays.map(essay =>
+                (<Essay
+                    essay={essay}
+                    lecture={report.lecture}
+                    key={essay.id}
+                    className="group-items-body-item"
+                    textStyle={textStyle}
+                />)
             )
         )
-    }, [props.report.params.gradedEssays]);
+    }, [props.report.params.essays, textStyle]);
 
-    const updateGrouping = (groupType, tag) => {
-        groupType = groupType ? groupType : grouping.groupType;
-        tag = tag ? tag : grouping.tag;
-        setGrouping({ groupType: groupType, tag: tag });
-    }
+    useEffect(() => {
+        const data = props.report.params;
+        if(data.status === 'saved') {
+            makeNotification({
+                type: 'success',
+                text: 'Результаты проверки успешно сохранены',
+                title: 'Реультат операции'
+            })
+            props.report.resetState();
+            props.routing.replace('/');
+        }
+
+    }, [props.report.params.status])
+
 
     const groupingGradedEssays = () => {
-        switch (grouping.groupType) {
+        switch (grouping.group_type) {
             case "none":
                 return createSingleList();
 
@@ -67,14 +65,14 @@ const index = (props) => {
     }
 
     const createSingleList = () => {
-        return ( <EssayGroup name="Все эссе" renderedEssays={ renderedEssays } essays={report.gradedEssays} /> )
+        return ( <EssayGroup name="Все эссе" renderedEssays={ renderedEssays } essays={report.essays} /> )
     }
 
     const groupBySimilarity = () => {
         const groups = {};
         const renderedGroups = {};
 
-        const essays = report.gradedEssays;
+        const essays = report.essays;
 
         for(let i = 0; i < essays.length; i++) {
             let group = groups[essays[i].group];
@@ -95,12 +93,12 @@ const index = (props) => {
     const groupByTag = () => {
         const groups = {"include": [], "not_include": []};
         const renderedGroups = {"include": [], "not_include": []};
-        const essays = report.gradedEssays;
+        const essays = report.essays;
 
         for(let i = 0; i < essays.length; i++) {
             let groupName = "not_include";
             for(let label of essays[i].labels) {
-                if(label.type === grouping.tag) {
+                if(label.type === grouping.group_tag) {
                     groupName = "include";
                     break;
                 }
@@ -111,7 +109,24 @@ const index = (props) => {
         }
 
         return Object.keys(groups).map(key =>
-            ( <EssayGroup key={key} name={`Группа подобия ${key === "include" ? "содержит" : "не содержит" } тег`} essays={ groups[key]} renderedEssays={ renderedGroups[key] } /> ),
+            ( <EssayGroup
+                key={key}
+                name={createTagGroupDescription(key)}
+                essays={ groups[key]}
+                renderedEssays={ renderedGroups[key] }
+            /> ),
+        )
+    }
+
+    const createTagGroupDescription = (key) => {
+        let name = `Группа подобия ${key === "include" ? "содержит" : "не содержит" }`;
+        return (
+             <div className="group-custom-header">
+                 <div className="group-custom-header-name">{name}</div>
+                <Tag color={convertLectureTypeToColor(grouping.group_tag)}>
+                    {convertLabelToDescription({ type: grouping.group_tag})}
+                </Tag>
+            </div>
         )
     }
 
@@ -126,22 +141,27 @@ const index = (props) => {
                     <div>
                         <div className="report-header">
                             <div className="report-header-control">
-                                <ComboBox
-                                    className={cn("report-header-control-item")}
-                                    options={groupTypeOptions}
-                                    description="Группировать по"
-                                    updateValueHandler={(value) => updateGrouping(value) }
+                                <EssayGroupPanel
+                                    className="report-header-control-item"
+                                    initialState={grouping}
+                                    stateUpdated={state => setGrouping(state)}
                                 />
-                                <ComboBox
-                                    options={tagOptions} description="Тег группировки"
-                                    updateValueHandler={(value) => updateGrouping("tag", value) }
-                                    className={cn("report-header-control-item", "report-header-control-item-combobox-tag",
-                                        {"report-header-control-item-combobox-tag--visible": grouping && grouping.groupType === "tag"})}
+                                <FontTunePanel
+                                    className="report-header-control-item"
+                                    initialState={textStyle}
+                                    stateUpdated={state => setTextStyle(state)}
                                 />
                             </div>
                         </div>
                         <div className="report-body">
                             {groupingGradedEssays()}
+                        </div>
+                        <div className="report-footer">
+                            <Button
+                                className="report-footer-end-button"
+                                name="Закончить проверку"
+                                clickHandler={() => props.report.endEvaluation()}
+                            />
                         </div>
                     </div>
                 )
@@ -150,4 +170,4 @@ const index = (props) => {
     )
 };
 
-export default inject(['report'])(observer(index));
+export default inject('report', 'routing')(observer(index));

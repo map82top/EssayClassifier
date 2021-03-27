@@ -1,10 +1,11 @@
 @import "variables";
 
-@mixin row-flex($justify-content: flex-start, $align-items: center) {
+@mixin row-flex($justify-content: flex-start, $align-items: center, $flex-wrap: nowrap) {
   display: flex;
   flex-direction: row;
   justify-content: $justify-content;
   align-items: $align-items;
+  flex-wrap: $flex-wrap;
 
   .flex-separator {
       visibility: hidden;
@@ -12,11 +13,12 @@
   }
 }
 
-@mixin column-flex($justify-content: flex-start, $align-items: center) {
+@mixin column-flex($justify-content: flex-start, $align-items: center, $flex-wrap: nowrap) {
   display: flex;
   flex-direction: column;
   justify-content: $justify-content;
   align-items: $align-items;
+  flex-wrap: $flex-wrap;
 }
 
 @mixin container-decoration($shadow-color: base-color('shadow'), $container-margin-bottom: $collapse-container-bottom-indent) {
@@ -25,8 +27,8 @@
   margin-bottom: $container-margin-bottom;
 }
 
-@mixin text-decoration($font-size: 1rem, $color: base-color('text'), $bgcolor: inherit) {
-  padding: $default-text-padding;
+@mixin text-decoration($font-size: 1rem, $color: base-color('text'), $bgcolor: inherit, $padding: $default-text-padding) {
+  padding: $padding;
   color: $color;
   margin: $default-container-margin;
   background-color: $bgcolor;

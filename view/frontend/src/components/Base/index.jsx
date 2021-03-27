@@ -6,7 +6,7 @@ const Index = ({className, children}) => {
     return (
         <>
             <div className="header">
-                <div className="header-logo">Site Watcher</div>
+                <div className="header-logo">Оценщик</div>
             </div>
             <div className={cn("content", className)}>
                 {children}

@@ -1,31 +1,3 @@
-%base-select {
-    border: none;
-    background-color: inherit;
-    outline: none;
-    scroll-behavior: smooth;
+.combobox {
 
-    &:hover {
-      border: none;
-    }
-}
-
-.combobox-container {
-  @include row-flex();
-  @include container-decoration();
-  width: max-content;
-  font-size: 1.1rem;
-  white-space: nowrap;
-
-  &-description {
-    @include text-decoration($color: base-color('primary-text'));
-    border-right: solid 1px base-color('devider');
-  }
-
-  &-body {
-    @include text-decoration($color: base-color('primary-text'));
-
-    &-combobox {
-      @extend %base-select;
-    }
-  }
 }

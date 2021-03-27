@@ -1,0 +1,19 @@
+$combobox-padding: 0.3rem;
+
+.input-wrapper {
+  @include row-flex();
+  @include container-decoration();
+  width: max-content;
+  font-size: 1.1rem;
+  white-space: nowrap;
+
+  &-description {
+    @include text-decoration($color: base-color('primary-text'), $padding: $combobox-padding);
+    border-right: solid 1px base-color('devider');
+  }
+
+  &-body {
+    @include text-decoration($color: base-color('primary-text'), $padding: $combobox-padding);
+    width: 100%;
+  }
+}

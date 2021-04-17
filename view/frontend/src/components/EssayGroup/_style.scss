@@ -4,7 +4,7 @@ $category-header-highlight-intend: 1vw;
 %category-header {
   @include container-decoration();
   @include row-flex();
-  height: 6vh;
+  height: 3.6rem;
   margin-bottom: 6px;
   border-top: 2px solid base-color('devider');
 }

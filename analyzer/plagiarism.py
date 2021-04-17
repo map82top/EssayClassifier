@@ -15,19 +15,19 @@ def create_plagiarism_matrix(essays):
         shingle_essay = genshingle(normalize_essay)
         shingle_essays.append(shingle_essay)
 
-    plagiat_matrix = np.empty((len(essays), len(essays)))
+    plagiarism_matrix = np.empty((len(shingle_essays), len(shingle_essays)))
 
     for i in range(len(shingle_essays)):
         for j in range(i, len(shingle_essays)):
             if i == j:
-                plagiat_matrix[i, j] = 100
+                plagiarism_matrix[i, j] = 100
                 continue
 
             score = compare(shingle_essays[i], shingle_essays[j])
-            plagiat_matrix[i, j] = score
-            plagiat_matrix[j, i] = score
+            plagiarism_matrix[i, j] = score
+            plagiarism_matrix[j, i] = score
 
-    return plagiat_matrix
+    return plagiarism_matrix
 
 
 def genshingle(tokens):
@@ -48,7 +48,7 @@ def compare(shingles_first_text, shingles_second_text):
         if shingles_first_text[i] in shingles_second_text:
             same = same + 1
 
-    return same*2/float(count_shingles1 + count_shingles2)*100
+    return same/(count_shingles1/100)
 
 
 

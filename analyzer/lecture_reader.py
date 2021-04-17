@@ -8,17 +8,17 @@ def read_from_file(path):
     text = ''
     for slide in prs.slides:
         text += handle_slide(slide)
-    return text
+    return text.strip()
 
 
 def read_from_presentation(presentation):
     text = ''
     for slide in presentation.slides:
         text += handle_slide(slide)
-    return text
+    return text.strip()
 
 
-def handle_slide(self, slide):
+def handle_slide(slide):
     text = ''
     for element in slide.shapes:
         if hasattr(element, "text"):

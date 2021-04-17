@@ -131,9 +131,9 @@ class ReportStore {
     }
 
     handleException(error) {
-        const data = error.response && error.response.data
+        const data = error.response ?  error.response.data : error.data
         this.params.error = {
-            text: data.text ? data.text : "Серверная ошибка!"
+            text: data && data.text ? data.text : "Серверная ошибка!"
         }
     }
 

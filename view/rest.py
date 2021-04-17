@@ -5,7 +5,10 @@ import pandas as pd
 from analyzer.analyzer import Analyzer
 from storage.core import run_orm
 from storage.entities import ReportSchema
+import traceback
+from analyzer.exceptions import *
 import json
+
 
 UPLOAD_FOLDER = '/uploaded_files'
 ALLOWED_EXTENSIONS = {'csv', 'pptx'}
@@ -25,7 +28,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@server.route('/')
+@server.route('/', methods=['GET'])
 def index():
     return server.send_static_file("index.html")
 
@@ -44,20 +47,27 @@ def upload_task():
 
         lecture = Presentation(lecture)
         essays = pd.read_excel(essays)
+        essays = essays.dropna(axis=0)
 
         socketio.emit('changed-report-status', json.dumps({'status': 'handling'}))
-        session = session_maker()
 
         report = analyzer.analyze(lecture, essays)
         report_schema = ReportSchema()
+        session = session_maker()
         session.add(report)
         session.commit()
 
         socketio.emit('changed-report-status', json.dumps({'status': 'handled'}))
         return report_schema.dump(report)
 
-    except Exception:
-        return json.dumps({"status": "error", "text": "Ошибка анализа загруженных эссе"}), 500
+    except Exception as e:
+        print(e)
+        print(traceback.print_exc())
+
+        if type(e) == NotFoundEssayColumn:
+            return json.dumps({"status": "error", "text": "Ошибка чтения файла с эссе. Не найдена колонка 'essay'"}), 500
+        else:
+            return json.dumps({"status": "error", "text": "Ошибка оценки загруженных эссе"}), 500
 
 
 @server.route('/end_check', methods=['POST'])
@@ -67,10 +77,17 @@ def end_check():
         report_schema = ReportSchema()
         json_data = json.loads(request.data)
         report = report_schema.load(data=json_data, session=session)
+
+        if report.lecture is None:
+            raise Exception("Received incorrect data. Report not found")
+
         session.commit()
         return json.dumps({"status": "success", "text": "Результаты проверки эссе успешно сохранены"})
 
-    except Exception:
+    except Exception as e:
+        print(e)
+        print(traceback.print_exc())
+        session.close()
         return json.dumps({"status": "error", "text": "Ошибка сохранения резултатов проверки"}), 500
 
 

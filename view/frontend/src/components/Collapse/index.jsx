@@ -3,7 +3,7 @@ import React from 'react';
 class Collapse extends React.Component {
     static defaultProps = {
         initialStyle: undefined,
-        checkTimeout: 50,
+        checkTimeout: 250,
         direction: 'vertical'
     };
 

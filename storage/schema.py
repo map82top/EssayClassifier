@@ -46,6 +46,11 @@ class Essay(Base):
     report_id = Column(Integer, ForeignKey('report.id'))
     statistic_id = Column(Integer, ForeignKey('statistic.id'))
     statistic = relationship('Statistic', backref='essay')
+
+
+
+
+
     # labels = relationship('Label', backref='essay')
 
 class Lecture(Base):

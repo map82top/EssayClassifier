@@ -1,6 +1,6 @@
 @import "../EssayGroup/style";
 
-$essay-header-height: 5.8vh;
+$essay-header-height: 3.1rem;
 $border-radius-for-rounding-effect: 8%;
 
 %bottom-header-highlight {
@@ -79,7 +79,7 @@ $border-radius-for-rounding-effect: 8%;
 
     &-id {
       width: 4vw;
-      height: $essay-header-height - 0.1vh;
+      height: $essay-header-height - 0.1rem;
       margin: $default-container-margin;
       border: solid 2px base-color('primary');
       border-radius: $default-border-radius;

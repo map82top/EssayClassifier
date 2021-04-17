@@ -4,11 +4,14 @@ from analyzer.lecture_reader import read_from_presentation
 from analyzer.supervisor import Supervisor
 from analyzer.plagiarism import create_plagiarism_matrix
 from analyzer.similarity import create_similarity_matrix
+from analyzer.exceptions import NotFoundEssayColumn
 import numpy as np
 
 nltk.download('punkt')
 nltk.download('stopwords')
 
+def column_to_lower(dataFrame):
+    dataFrame.columns = [col_name.lower() for col_name in dataFrame.columns.to_list()]
 
 class Analyzer:
     def __init__(self):
@@ -16,7 +19,12 @@ class Analyzer:
 
     def analyze(self, lecture, essays):
         lecture_text = read_from_presentation(lecture)
-        essays = essays['essay'].tolist()
+        column_to_lower(essays)
+
+        if 'essay' not in essays.columns:
+            raise NotFoundEssayColumn()
+
+        essays = essays.loc[:, 'essay'].tolist()
 
         essays.insert(0, lecture_text)
         essays = [self.supervisor.markup(essay) for essay in essays]
@@ -113,7 +121,7 @@ class Analyzer:
             idx = essays_idx.pop(0)
             group_by_essay[idx] = current_group_id
 
-            #find all siblings
+            # find all siblings
             for j in range(idx + 1, similarity_matrix.shape[0]):
                 if similarity_matrix[idx, j] >= 10:
                     if j not in essays_idx:
@@ -158,7 +166,6 @@ class Analyzer:
                 max_mean = mean_similarity
 
         return nearest_group_id
-
 
 
 

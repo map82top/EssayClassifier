@@ -64,7 +64,7 @@ const FontTunePanel = (props) => {
             </InputWrapper>
             <InputWrapper
                 className={cn("ftp-font-margin", "ftp-item")}
-                description="Размер шрифта"
+                description="Размер отступов"
                 inputWidth={200}
             >
                 <Slider

@@ -11,6 +11,7 @@ from pptx import Presentation
 import numpy as np
 import pandas as pd
 from analyzer.exceptions import *
+from analyzer.lecture_reader import read_from_presentation
 
 TEST_DATA_PATH = "resources/test_data.json"
 TEST_PRESENTATION_PATH = "resources/test_presentation.pptx"
@@ -99,9 +100,10 @@ class PlagiarismTest(unittest.TestCase):
 
     def test_analyzer(self):
         lecture = Presentation(TEST_PRESENTATION_PATH)
+        lecture_text = read_from_presentation(lecture)
         essays = self.test_data["analyzer_test_essays"]
         pd_essays = pd.DataFrame(data=essays, columns=["text"])
-        report = self.analyzer.analyze(lecture, pd_essays)
+        report = self.analyzer.analyze(lecture_text, pd_essays)
         self.assert_lecture(self.test_data["lecture_reader_expected_text"], report.lecture, 176)
         self.assert_essay(essays[0], report.essays[0], GradeType.FAIL, 1, [LabelType.FAIL, LabelType.LECTURE_PLAGIARISM], 302)
         self.assert_essay(essays[1], report.essays[1], GradeType.SUCCESS, 1, [LabelType.SUCCESS], 338)

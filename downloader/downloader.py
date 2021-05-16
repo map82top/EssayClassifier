@@ -18,9 +18,10 @@ def download_archive(drive, archive, item_callback):
         item = {"author": file_name.split('_')[0]}
         html_file = archive.read(os.path.join(file_name))
         html_text = text_from_html(html_file)
-        links = re.findall(r'http[s]?://docs.google.com/[^ ]+', html_text)
+        links = re.findall(r'http[s]?://docs.google.com/document/d/[^ ]+', html_text)
+        links.extend(re.findall(r'http[s]?://drive.google.com/file/d/[^ ]+', html_text))
 
-        if len(links) == 0:
+        if len(links) + len(links) == 0:
             clean_html_text = clean_text(html_text)
             if clean_html_text.strip() != '':
                 item["text"] = clean_html_text
@@ -30,7 +31,7 @@ def download_archive(drive, archive, item_callback):
                 item["tag"] = "IGNORE"
         elif len(links) == 1:
             print(links)
-            link_content = drive.download_text_file(re.findall(r"d/\w+", links[0])[0][2:])
+            link_content = drive.download_file(re.findall(r"d/[^/]+", links[0])[0][2:])
             if link_content.strip() != '':
                 item["text"] = clean_text(link_content)
                 item["tag"] = "LINK"

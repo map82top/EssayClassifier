@@ -7,6 +7,7 @@ from google.oauth2.credentials import Credentials
 import os
 import io
 from googleapiclient.http import MediaIoBaseDownload
+import docx
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = []
@@ -34,6 +35,17 @@ class Drive():
 
         self.service = build('drive', 'v3', credentials=creds)
 
+    def download_file(self, file_id):
+        result = self.download_text_file(file_id)
+        if result is not None:
+            return result
+
+        result = self.download_docx_file(file_id)
+        if result is not None:
+            return result
+
+        return ''
+
     def download_text_file(self, file_id):
         try:
             request = self.service.files().export_media(fileId=file_id, mimeType='text/plain')
@@ -49,4 +61,24 @@ class Drive():
 
         except Exception as e:
             print(e)
-            return ''
+            return None
+
+    def download_docx_file(self, file_id):
+        try:
+            request = self.service.files().get_media(fileId=file_id)
+            fh = io.BytesIO()
+            downloader = MediaIoBaseDownload(fd=fh, request=request)
+            done = False
+            while not done:
+                status, done = downloader.next_chunk()
+
+            fh.seek(0)
+            doc = docx.Document(fh)
+            fullText = []
+            for para in doc.paragraphs:
+                fullText.append(para.text)
+            return ' '.join(fullText)
+
+        except Exception as e:
+            print(e)
+            return None

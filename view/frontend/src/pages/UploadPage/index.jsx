@@ -25,9 +25,9 @@ const Index = (props) =>  {
             <form className="upload-form">
                 <DocumentUpload
                     className="upload-form-file"
-                    description="Презентация с текстом лекции в формате pptx"
+                    description="Загрузите текст лекции в формате pptx, txt или docx"
                     selectFile={(file) => report.selectLecture(file)}
-                    accept=".pptx"
+                    accept=".pptx,.txt,.docx"
                 />
 
                 <DocumentUpload

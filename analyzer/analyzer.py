@@ -1,6 +1,5 @@
 import nltk
 from storage.schema import *
-from analyzer.lecture_reader import read_from_presentation
 from analyzer.supervisor import Supervisor
 from analyzer.plagiarism import create_plagiarism_matrix
 from analyzer.similarity import create_similarity_matrix
@@ -20,7 +19,6 @@ class Analyzer:
         self.supervisor = Supervisor()
 
     def analyze(self, lecture, essays):
-        lecture_text = read_from_presentation(lecture)
         column_to_lower(essays)
 
         if 'text' not in essays.columns:
@@ -30,7 +28,7 @@ class Analyzer:
             essays.loc[:, 'tag'] = 'TEXT'
 
         essays_list = essays.loc[:, 'text'].tolist()
-        essays_list.insert(0, lecture_text)
+        essays_list.insert(0, lecture)
 
         essays_list = [self.supervisor.markup(essay) for essay in essays_list]
 

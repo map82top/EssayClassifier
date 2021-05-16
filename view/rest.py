@@ -12,7 +12,9 @@ import zipfile
 from analyzer.exceptions import *
 import json
 import re
-
+import docx
+from analyzer.lecture_reader import read_from_presentation
+import io
 
 class EstimatorServer():
     def __init__(self, gdrive_certificat_path):
@@ -33,6 +35,23 @@ class EstimatorServer():
         self.socketio.emit('changed-report-status', json.dumps({'status': 'handling',
                             'description': f'Обработано ответов из архива {current_item_id} из {count_items}'}))
 
+    def load_lecture_file(self, file):
+        extension = re.findall(r'\.\w+$', file.filename)[0]
+
+        if extension == '.pptx':
+            lecture = Presentation(file)
+            return read_from_presentation(lecture)
+        if extension == '.txt':
+            wrapper = io.TextIOWrapper(file, encoding='utf-8')
+            return wrapper.read()
+        if extension == '.docx':
+            lecture = docx.Document(file)
+            fullText = []
+            for para in lecture.paragraphs:
+                fullText.append(para.text)
+            return ' '.join(fullText)
+
+        raise NotSupportLectureExtensionType(extension)
 
     def load_essays_file(self, file):
         extension = re.findall(r'\.\w+$', file.filename)[0]
@@ -63,7 +82,7 @@ class EstimatorServer():
 
             self.socketio.emit('changed-report-status', json.dumps({'status': 'handling', "description": "Обработка файлов"}))
 
-            lecture = Presentation(lecture)
+            lecture = self.load_lecture_file(lecture)
             essays = self.load_essays_file(essays)
             essays = essays.dropna(axis=0)
 
@@ -82,7 +101,8 @@ class EstimatorServer():
             print(e)
             print(traceback.print_exc())
 
-            if type(e) == NotFoundEssayColumn or type(e) == NotSupportEssayExtensionType:
+            if type(e) == NotFoundEssayColumn or type(e) == NotSupportEssayExtensionType\
+                    or type(e) == NotSupportLectureExtensionType:
                 return json.dumps({"status": "error", "text": str(e)}), 500
             else:
                 return json.dumps({"status": "error", "text": "Ошибка оценки загруженных эссе"}), 500

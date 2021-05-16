@@ -1,6 +1,9 @@
 import {action, observable, computed} from "mobx";
 import { estimatorService } from "../services";
-import * as data from "../test/report.json";
+import data from "../test/report.json";
+import FileSaver from 'file-saver';
+import XLSX from 'xlsx';
+import dayjs from 'dayjs'
 
 const local = false
 
@@ -16,7 +19,7 @@ class ReportStore {
             lectureFile: null,
             essaysFile: null,
             local: local,
-            status: local ? 'handled' : null,
+            status: local ? { 'status': 'handled' } : {},
             lecture: local ? data.lecture : null,
             essays: local ? data.essays : [],
             error: null
@@ -31,8 +34,8 @@ class ReportStore {
         this.params.essaysFile = file;
     }
 
-    @action updateStatus(status) {
-        this.params.status = status;
+    @action updateStatus(update) {
+        this.params.status = update
     }
 
     @action setTeacherGrade(id, teacher_grade) {
@@ -76,7 +79,11 @@ class ReportStore {
     }
 
     @computed get textStatus() {
-        switch (this.params.status) {
+        const status = this.params.status
+        if (status.description) {
+            return status.description;
+        }
+        switch (status.status) {
             case 'handling':
                 return 'Обрабатывается';
             case 'handled':
@@ -95,7 +102,6 @@ class ReportStore {
             .then(resolve => {
                     this.params.lecture = resolve.data.lecture;
                     this.params.essays = resolve.data.essays;
-
                     this.computeInternalEssayId();
             }).catch(error => {
                 this.handleException(error)
@@ -125,9 +131,42 @@ class ReportStore {
 
     @action endEvaluation() {
         estimatorService.endEvaluation({essays: this.params.essays, lecture: this.params.lecture})
-            .then(resolve => {
-                this.params.status = 'saved';
-            }).catch(error => this.handleException(error.response))
+            .then(resolve => {})
+            .catch(error => {});
+
+        const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        const fileExtension = '.xlsx';
+        const ws = XLSX.utils.json_to_sheet(this.getSheetEssayData());
+        const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const data = new Blob([excelBuffer], {type: fileType});
+        const reportDate = dayjs().format('YYYYMMDD');
+        FileSaver.saveAs(data, `EssayGrading_${reportDate}${fileExtension}`);
+    }
+
+    getSheetEssayData() {
+        const essays = this.params.essays;
+        const sheetEssays = [];
+        essays.forEach((essay, index, array) => {
+               sheetEssays.push({
+                   "Номер": index + 1,
+                   "Автор": essay["author"] || '',
+                   "Оценка": this.convertGrade(essay["teacher_grade"] || essay["grade"])
+               })
+        });
+
+        return sheetEssays;
+    }
+
+    convertGrade(grade) {
+        switch (grade.toLowerCase()) {
+            case "success":
+                return "Зачет";
+            case "fail":
+                return "Незачет";
+            default:
+                return "";
+        }
     }
 
     handleException(error) {

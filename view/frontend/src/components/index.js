@@ -9,3 +9,5 @@ export { default as Collapse} from "./Collapse/index.jsx";
 export { default as FontTunePanel} from "./FontTunePanel/index.jsx";
 export { default as ControlsGroup } from "./ControlsGroup/index.jsx";
 export { default as  EssayGroupPanel } from "./EssayGroupPanel/index.jsx";
+export { default as  ActionPanel } from "./ActionPanel/index.jsx";
+export { default as  TextContainer } from "./TextContainer/index.jsx";

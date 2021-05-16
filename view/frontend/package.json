@@ -66,6 +66,8 @@
     "antd": "^4.5.3",
     "axios": "^0.21.0",
     "classnames": "^2.2.6",
+    "dayjs": "^1.10.4",
+    "file-saver": "^2.0.5",
     "history": "^4.10.1",
     "mobx": "^5.15.4",
     "mobx-react": "^6.3.1",
@@ -73,9 +75,11 @@
     "rc-resize-observer": "^1.0.0",
     "react": "^16.8.0",
     "react-dom": "^16.0.1",
+    "react-process-string": "^1.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-select": "^4.1.0",
-    "socket.io-client": "^2.3.1"
+    "socket.io-client": "^2.3.1",
+    "xlsx": "^0.17.0"
   }
 }

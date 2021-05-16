@@ -22,6 +22,7 @@ $default-indent: 1%;
     @include column-flex($justify-content: center);
     border: 1px dashed base-color('dark-primary');
     margin: 1% auto;
+    padding: 4%;
 
     &-icon {
       font-size: 4rem;

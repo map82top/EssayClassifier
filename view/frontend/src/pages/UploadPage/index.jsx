@@ -4,18 +4,18 @@ import './_style.scss';
 import {observer, inject} from "mobx-react";
 
 const Index = (props) =>  {
-    const { replace } = props.routing;
+    const { replace, push } = props.routing;
     const report = props.report;
 
     const onSendReportHandler = (e) => {
         window.socket.on('changed-report-status', (json_data) => {
            console.log(`change status ${json_data}`);
            const object_data = JSON.parse(json_data);
-           report.updateStatus(object_data.status);
+           report.updateStatus(object_data);
        });
 
         if(report.startEvaluation()) {
-            replace('/report');
+            push('/report');
         }
     }
 
@@ -32,9 +32,9 @@ const Index = (props) =>  {
 
                 <DocumentUpload
                     className="upload-form-file"
-                    description="Таблица с эссе в формате xlsx"
+                    description="Архив с ответами на задание, сгенерированный СДО, или таблица с эссе в формате xlsx или csv"
                     selectFile={(file) => report.selectEssays(file)}
-                    accept=".csv,.xlsx"
+                    accept=".csv,.xlsx,.zip"
                 />
 
                 <Button

@@ -39,6 +39,7 @@ class EssaySchema(SQLAlchemySchema):
     grade = auto_field()
     teacher_grade = auto_field()
     group = auto_field()
+    author = auto_field()
     statistic = Nested(StatisticSchema)
     labels = Nested(LabelSchema, many=True)
 

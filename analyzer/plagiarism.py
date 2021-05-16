@@ -48,7 +48,11 @@ def compare(shingles_first_text, shingles_second_text):
         if shingles_first_text[i] in shingles_second_text:
             same = same + 1
 
-    return same/(count_shingles1/100)
+    count_shingles = count_shingles1 + count_shingles2
+    if count_shingles == 0:
+        count_shingles = 1
+
+    return same*2/float(count_shingles)*100
 
 
 

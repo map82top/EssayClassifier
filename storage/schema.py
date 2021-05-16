@@ -20,6 +20,7 @@ class LabelType(str, enum.Enum):
     TEACHER_SUCCESS = 'TEACHER_SUCCESS'
     TEACHER_FAIL = 'TEACHER_FAIL'
     FAIL = 'FAIL'
+    IGNORE = 'IGNORE'
 
 
 class Report(Base):
@@ -41,6 +42,7 @@ class Essay(Base):
     grade = Column(Enum(GradeType))
     teacher_grade = Column(Enum(GradeType), nullable=True)
     group = Column(Integer)
+    author = Column(Text, nullable=True)
 
     # relations
     report_id = Column(Integer, ForeignKey('report.id'))

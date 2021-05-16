@@ -4,7 +4,7 @@ import { Tag, Checkbox } from "antd";
 import { RightOutlined} from "@ant-design/icons";
 import "./_style.scss";
 import { observer, inject } from "mobx-react";
-import { Button, Collapse } from "../../components";
+import { Button, Collapse, TextContainer } from "../../components";
 import { convertLectureTypeToColor, convertLabelToDescription } from "../../utils";
 
 const Essay = (props) => {
@@ -92,22 +92,20 @@ const Essay = (props) => {
             >
                 <div className={cn('essay-collapse-content')}>
                     <div className="essay-collapse-content-essay">
-                        <p
+                        <TextContainer
                             className={cn({"lecture-visible": lectureVisible})}
                             style={createTextStyle()}
-                        >
-                            {props.essay.text}
-                        </p>
+                            text={props.essay.text}
+                        />
                     </div>
                     {
                         lectureVisible ? (
                             <div className={cn("essay-collapse-content-lecture", {"lecture-visible": lectureVisible})}>
-                                <p
+                                <TextContainer
                                     className={cn({"lecture-visible": lectureVisible})}
                                     style={createTextStyle()}
-                                >
-                                    {props.lecture.text}
-                                </p>
+                                    text={props.lecture.text}
+                                />
                             </div>
                         ) : ''
                     }

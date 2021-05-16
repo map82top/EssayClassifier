@@ -2,6 +2,8 @@ export function convertLectureTypeToColor(type) {
     switch (type) {
         case 'ATTENTION':
             return 'orange';
+        case 'IGNORE':
+            return 'purple';
         case 'LECTURE_PLAGIARISM':
         case 'ESSAY_PLAGIARISM':
         case 'FAIL':
@@ -20,6 +22,9 @@ export function convertLabelToDescription(label) {
     switch (label.type) {
         case 'ATTENTION':
             base = 'Спорная оценка';
+            break;
+        case 'IGNORE':
+            base = 'Ошибка проверки'
             break;
         case 'LECTURE_PLAGIARISM':
             base = 'Плагиат лекции';

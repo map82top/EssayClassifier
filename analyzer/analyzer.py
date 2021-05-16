@@ -10,8 +10,10 @@ import numpy as np
 nltk.download('punkt')
 nltk.download('stopwords')
 
+
 def column_to_lower(dataFrame):
     dataFrame.columns = [col_name.lower() for col_name in dataFrame.columns.to_list()]
+
 
 class Analyzer:
     def __init__(self):
@@ -21,27 +23,30 @@ class Analyzer:
         lecture_text = read_from_presentation(lecture)
         column_to_lower(essays)
 
-        if 'essay' not in essays.columns:
+        if 'text' not in essays.columns:
             raise NotFoundEssayColumn()
 
-        essays = essays.loc[:, 'essay'].tolist()
+        if 'tag' not in essays.columns:
+            essays.loc[:, 'tag'] = 'TEXT'
 
-        essays.insert(0, lecture_text)
-        essays = [self.supervisor.markup(essay) for essay in essays]
+        essays_list = essays.loc[:, 'text'].tolist()
+        essays_list.insert(0, lecture_text)
 
-        plagiarism_matrix = create_plagiarism_matrix(essays)
-        similarity_matrix = create_similarity_matrix(essays)
+        essays_list = [self.supervisor.markup(essay) for essay in essays_list]
+
+        plagiarism_matrix = create_plagiarism_matrix(essays_list)
+        similarity_matrix = create_similarity_matrix(essays_list)
 
         groups = self.find_similarity_groups_by_rows(similarity_matrix)
-        count_essays = len(essays) - 1
+        count_essays = len(essays_list) - 1
         graded_essays = [Essay() for _ in range(count_essays)]
         lecture = None
 
-        for i, essay in enumerate(essays):
+        for i, essay in enumerate(essays_list):
             if i == 0:
                 lecture = self.handle_lecture(essay)
             else:
-                self.handle_essay(i, essay, graded_essays, groups[i], similarity_matrix, plagiarism_matrix)
+                self.handle_essay(i, essay, graded_essays, groups[i], similarity_matrix, plagiarism_matrix, essays.loc[i - 1, :])
 
         return Report(
             lecture=lecture,
@@ -60,7 +65,26 @@ class Analyzer:
         )
 
 
-    def handle_essay(self, index, essay, graded_essays, group, similarity_matrix, plagiarism_matrix):
+    def handle_essay(self, index, essay, graded_essays, group, similarity_matrix, plagiarism_matrix, real_record):
+        real_essay_index = index - 1
+        author = ''
+        if 'author' in real_record:
+            author = real_record['author']
+
+        if real_record['tag'] == 'IGNORE':
+            db_essay = graded_essays[real_essay_index]
+            db_essay.text = real_record['text']
+            db_essay.grade = GradeType.FAIL
+            db_essay.group = group
+            db_essay.labels = [Label(type=LabelType.IGNORE)]
+            db_essay.author = author
+            db_essay.statistic = Statistic(
+                num_letters=essay.num_letters,
+                num_words=essay.num_words,
+                num_sentences=essay.num_sentences
+            )
+            return
+
         score = similarity_matrix[0, index]
         plagiarism_score = round(plagiarism_matrix[0, index], 1)
         grade = None
@@ -98,12 +122,12 @@ class Analyzer:
                 Label(type=LabelType.SUCCESS)
             )
 
-        real_essay_index = index - 1
         db_essay = graded_essays[real_essay_index]
         db_essay.text = essay.text
         db_essay.grade = grade
         db_essay.group = group
         db_essay.labels = labels
+        db_essay.author = author
         db_essay.statistic = Statistic(
                 num_letters=essay.num_letters,
                 num_words=essay.num_words,

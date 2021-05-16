@@ -1,5 +1,5 @@
 import unittest
-from view.rest import socketio, server
+from view.rest import EstimatorServer
 import io
 from werkzeug.datastructures import FileStorage
 import os
@@ -18,8 +18,10 @@ def read_test_data():
 
 class RestTest(unittest.TestCase):
     def setUp(self):
-        self.flask_client = server.test_client()
-        self.socket_client = socketio.test_client(server, flask_test_client=self.flask_client)
+        self.server = EstimatorServer("../../downloader/resources")
+        self.flask_client = self.server.server.test_client()
+        self.socket_client = self.server.socketio.test_client(self.server.server,
+                                                              flask_test_client=self.flask_client)
         self.test_data = read_test_data()
         pass
 
@@ -53,14 +55,14 @@ class RestTest(unittest.TestCase):
         socket_response = self.socket_client.get_received()
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(socket_response), 2)
+        self.assertEqual(len(socket_response), 3)
         handling_notification = socket_response[0]
         self.assertEqual(handling_notification['name'], 'changed-report-status')
         self.assertEqual(len(handling_notification['args']), 1)
         status_message = json.loads(handling_notification['args'][0])
         self.assertEqual(status_message["status"], "handling")
 
-        handled_notification = socket_response[1]
+        handled_notification = socket_response[2]
         self.assertEqual(handled_notification['name'], 'changed-report-status')
         self.assertEqual(len(handled_notification['args']), 1)
         status_message = json.loads(handled_notification['args'][0])
@@ -113,7 +115,7 @@ class RestTest(unittest.TestCase):
         socket_response = self.socket_client.get_received()
 
         self.assertEqual(response.status_code, 500)
-        self.assertEqual(len(socket_response), 1)
+        self.assertEqual(len(socket_response), 2)
         handling_notification = socket_response[0]
         self.assertEqual(handling_notification['name'], 'changed-report-status')
         self.assertEqual(len(handling_notification['args']), 1)
@@ -133,7 +135,7 @@ class RestTest(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(len(socket_response), 0)
 
-    def test_upload_incorect_files(self):
+    def test_upload_incorrect_files(self):
         data = {}
         lecture = FileStorage(
             stream=io.BytesIO(b"Empty file"),
@@ -149,8 +151,8 @@ class RestTest(unittest.TestCase):
         response = self.flask_client.post('/upload', content_type='multipart/form-data', data=data)
         socket_response = self.socket_client.get_received()
 
-        self.assertEqual(response.status_code, 500)
-        self.assertEqual(len(socket_response), 0)
+        self.assertEqual(500, response.status_code)
+        self.assertEqual(1, len(socket_response))
         exception = json.loads(response.data)
         self.assertEqual(exception["status"], "error")
         self.assertIsNotNone(exception["text"])
@@ -173,7 +175,7 @@ class RestTest(unittest.TestCase):
         socket_response = self.socket_client.get_received()
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(socket_response), 2)
+        self.assertEqual(len(socket_response), 3)
 
         report = json.loads(response.data)
         change_essay = report["essays"][0]

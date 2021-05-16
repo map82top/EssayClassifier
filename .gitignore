@@ -2,5 +2,5 @@
 #/view/frontend/static
 /view/frontend/node_modules/
 /venv/
-/180.zip
-/Test similarity.ipynb
+/test_data/180.zip
+/research/Test similarity.ipynb

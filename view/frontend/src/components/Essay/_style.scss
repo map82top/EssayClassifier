@@ -96,6 +96,13 @@ $border-radius-for-rounding-effect: 8%;
     @extend %collapse-body;
     @include column-flex();
 
+    -webkit-touch-callout: default; /* iOS Safari */
+    -webkit-user-select: text;   /* Chrome/Safari/Opera */
+    -html-user-select: auto;    /* Konqueror */
+    -moz-user-select: auto;      /* Firefox */
+    -ms-user-select: auto;       /* Internet Explorer/Edge */
+     user-select: text;
+
     &-content {
       @include row-flex();
 

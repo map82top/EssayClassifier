@@ -71,12 +71,12 @@ class PlagiarismTest(unittest.TestCase):
         result = plagiarism.create_plagiarism_matrix(essays)
 
         self.assertEqual((result.shape == np.array([len(essays), len(essays)])).all(), True)
-        # для полюстного эссе номер 1
+        # для полюсного эссе номер 1
         self.assertEqual(result[0, 1] == 100, True) # эссе имеет сходство по 100% предолжений
-        self.assertEqual(result[0, 2] > 35 and result[0, 2] < 65, True) # эссе имеет сходство по 50% предолжений
+        self.assertEqual(result[0, 2] > 33 and result[0, 2] < 65, True) # эссе имеет сходство по 50% предолжений
         self.assertEqual(result[0, 3] == 0, True)
 
-        # для полюстного эссе номер 2
+        # для полюсного эссе номер 2
         self.assertEqual(result[3, 0] == 0, True)
         self.assertEqual(result[3, 1] == 0, True) # эссе имеет сходство по 0% предолжений
         self.assertEqual(result[3, 2] > 35 and result[3, 2] < 65, True) # эссе имеет сходство по 50% предолжений
@@ -100,7 +100,7 @@ class PlagiarismTest(unittest.TestCase):
     def test_analyzer(self):
         lecture = Presentation(TEST_PRESENTATION_PATH)
         essays = self.test_data["analyzer_test_essays"]
-        pd_essays = pd.DataFrame(data=essays, columns=["essay"])
+        pd_essays = pd.DataFrame(data=essays, columns=["text"])
         report = self.analyzer.analyze(lecture, pd_essays)
         self.assert_lecture(self.test_data["lecture_reader_expected_text"], report.lecture, 176)
         self.assert_essay(essays[0], report.essays[0], GradeType.FAIL, 1, [LabelType.FAIL, LabelType.LECTURE_PLAGIARISM], 302)

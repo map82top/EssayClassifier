@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import {Base, Essay, EssayGroup, Button, FontTunePanel, EssayGroupPanel } from "../../components";
+import {
+    Base,
+    Essay,
+    EssayGroup,
+    Button,
+    FontTunePanel,
+    EssayGroupPanel,
+    ActionPanel,
+} from "../../components";
 import { Spin, Tag } from 'antd';
 import './_style.scss';
 import {inject, observer} from "mobx-react";
@@ -133,7 +141,7 @@ const index = (props) => {
   return (
         <Base className="report">
             {
-                props.report.params.status !== 'handled' ? (
+                props.report.params.status.status !== 'handled' ? (
                     <div className="report-loading">
                         <Spin tip={ props.report.textStatus } className="report-loading-indicator" size="large"/>
                     </div>
@@ -151,17 +159,16 @@ const index = (props) => {
                                     initialState={textStyle}
                                     stateUpdated={state => setTextStyle(state)}
                                 />
+                                <ActionPanel
+                                    className="report-header-action-item"
+                                    exportHandler={() => props.report.endEvaluation()}
+                                />
                             </div>
                         </div>
                         <div className="report-body">
                             {groupingGradedEssays()}
                         </div>
                         <div className="report-footer">
-                            <Button
-                                className="report-footer-end-button"
-                                name="Закончить проверку"
-                                clickHandler={() => props.report.endEvaluation()}
-                            />
                         </div>
                     </div>
                 )

@@ -1,32 +1,35 @@
 {
     "essays":[
         {
-            "grade":"success",
+            "grade":"SUCCESS",
             "teacher_grade": null,
             "group":1,
             "id":1,
             "internal_id": 1,
             "statistic": {"num_letters": 150, "num_words": 50, "num_sentences": 6},
+            "author": "Иванов Иван Иванович",
             "labels":[
                 {"probability":null,"reference":null,"type":"SUCCESS"},
                 {"probability":null,"reference":null,"type":"ATTENTION"}
             ],
             "text":"Когда человек сознательно или интуитивно выбирает себе в жизни какую-то цель, жизненную задачу, он невольно дает себе оценку. По тому, ради чего человек живет, можно судить и о его самооценке - низкой или высокой."
         },{
-            "grade":"success",
+            "grade":"SUCCESS",
             "teacher_grade": null,
             "group":1,
             "id":2,
             "internal_id": 2,
+            "author": "Голубева Альбина Николаевна",
             "statistic": {"num_letters": 230, "num_words": 60, "num_sentences": 7},
             "labels":[{"probability":null,"reference":null,"type":"SUCCESS"}],
             "text":"Если человек живет, чтобы приносить людям добро, облегчать их страдания, давать людям радость, то он оценивает себя на уровне этой своей человечности. Он ставит себе цель, достойную человека."
         },{
-            "grade":"fail",
+            "grade":"FAIL",
             "teacher_grade": null,
             "group":2,
             "id":3,
             "internal_id": 3,
+            "author": "Голубева Альбина Николаевна",
             "statistic": {"num_letters": 320, "num_words": 80, "num_sentences": 9},
             "labels":[
                 {"probability":null,"reference":null,"type":"FAIL"},
@@ -36,11 +39,12 @@
             ],
             "text":"Только такая цель позволяет человеку прожить свою жизнь с достоинством и получить настоящую радость. Да, радость! Подумайте: если человек ставит себе задачей увеличивать в жизни добро, приносить людям счастье, какие неудачи могут его постигнуть? Не тому помочь? Но много ли людей не нуждаются в помощи?"
         },{
-            "grade":"success",
+            "grade":"SUCCESS",
             "teacher_grade": null,
             "group":1,
             "id":4,
             "internal_id": 4,
+            "author": "Смирнова Ольга Вячеславовна",
             "statistic": {"num_letters": 242, "num_words": 76, "num_sentences": 5},
             "labels":[
                 {"probability":null,"reference":null,"type":"SUCCESS"},
@@ -49,11 +53,12 @@
             ],
             "text":"Если жить только для себя, своими мелкими заботами о собственном благополучии, то от прожитого не останется и следа. Если же жить для других, то другие сберегут то, чему служил, чему отдавал силы."
         },{
-            "grade":"fail",
+            "grade":"FAIL",
             "teacher_grade":null,
             "group":2,
             "id":5,
             "internal_id": 5,
+            "author": "Борисов Евгений Анатольевич",
             "statistic": {"num_letters": 234, "num_words": 70, "num_sentences": 10},
             "labels":[
                 {"probability":null,"reference":null,"type":"FAIL"},
@@ -61,6 +66,18 @@
                 {"probability":0.4,"reference":3, "internal_reference":3 ,"type":"ESSAY_PLAGIARISM"}
             ],
             "text":"Можно по-разному определять цель своего существования, но цель должна быть. Надо иметь и принципы в жизни. Одно правило в жизни должно быть у каждого человека, в его цели жизни, в его принципах жизни, в его поведении: надо прожить жизнь с достоинством, чтобы не стыдно было вспоминать."
+        },{
+            "grade": "FAIL",
+            "teacher_grade":null,
+            "group":3,
+            "id":6,
+            "internal_id": 6,
+            "author": "Зубенко Владимир Константинович",
+            "statistic": {"num_letters": 80, "num_words": 10, "num_sentences": 1},
+            "labels":[
+                {"probability":null,"reference":null,"type":"IGNORE"}
+            ],
+            "text":"https://drive.google.com/file/d/1F0dyb0ununoKmJyi2CwV47TU4q_reSeb/view?usp=sharing"
         }],
     "lecture":{
         "id":1,

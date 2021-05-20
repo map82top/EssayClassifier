@@ -25,15 +25,26 @@ class Drive():
             creds = Credentials.from_authorized_user_file(self.token_path, SCOPES)
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
+                creds = self.refresh_token(creds)
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
                     self.credentials_path, self.scopes)
                 creds = flow.run_local_server(port=0)
+
             with open(self.token_path, 'w') as token:
                 token.write(creds.to_json())
 
         self.service = build('drive', 'v3', credentials=creds)
+
+    def refresh_token(self, creds):
+        try:
+            creds.refresh(Request())
+        except:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                self.credentials_path, self.scopes)
+            creds = flow.run_local_server(port=0)
+        finally:
+            return creds
 
     def download_file(self, file_id):
         result = self.download_text_file(file_id)

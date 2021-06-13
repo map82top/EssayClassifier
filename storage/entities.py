@@ -40,6 +40,7 @@ class EssaySchema(SQLAlchemySchema):
     teacher_grade = auto_field()
     group = auto_field()
     author = auto_field()
+    coincidence = auto_field()
     statistic = Nested(StatisticSchema)
     labels = Nested(LabelSchema, many=True)
 
@@ -52,6 +53,7 @@ class LectureSchema(SQLAlchemySchema):
 
     id = auto_field()
     text = auto_field()
+    coincidence = auto_field()
     statistic = Nested(StatisticSchema)
 
 

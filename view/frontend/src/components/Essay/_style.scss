@@ -52,18 +52,6 @@ $border-radius-for-rounding-effect: 8%;
             transition: all $default-animation-timeout linear;
             @include text-disappearing();
           }
-
-          &-tags {
-            margin: $default-container-margin;
-            width: $max-content-width;
-
-            &-item {
-              width: max-content;
-              height: max-content;
-              font-size: 1rem;
-              margin: $default-container-margin;
-            }
-          }
       }
 
       &-control {
@@ -135,6 +123,6 @@ $border-radius-for-rounding-effect: 8%;
   @include row-flex($justify-content: flex-end);
 }
 
-.lecture-visible {
+.comparing-visible {
   width: 100% !important;
 }

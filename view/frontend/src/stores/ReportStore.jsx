@@ -4,8 +4,9 @@ import data from "../test/report.json";
 import FileSaver from 'file-saver';
 import XLSX from 'xlsx';
 import dayjs from 'dayjs'
+import {convertLabelToDescription} from "../utils";
 
-const local = false
+const local = true;
 
 class ReportStore {
     @observable params = {}
@@ -23,6 +24,14 @@ class ReportStore {
             lecture: local ? data.lecture : null,
             essays: local ? data.essays : [],
             error: null
+        }
+
+        if (local) {
+            this.params.lecture.coincidence = JSON.parse(this.params.lecture.coincidence);
+            for (let essay of this.params.essays) {
+                essay.coincidence = JSON.parse(essay.coincidence);
+            }
+            this.convert_coincidence();
         }
     }
 
@@ -102,7 +111,12 @@ class ReportStore {
             .then(resolve => {
                     this.params.lecture = resolve.data.lecture;
                     this.params.essays = resolve.data.essays;
+                    this.params.lecture.coincidence = JSON.parse(this.params.lecture.coincidence);
+                    for (let essay of this.params.essays) {
+                        essay.coincidence = JSON.parse(essay.coincidence);
+                    }
                     this.computeInternalEssayId();
+                    this.convert_coincidence();
             }).catch(error => {
                 this.handleException(error)
             })
@@ -129,6 +143,36 @@ class ReportStore {
         }
     }
 
+    convert_coincidence() {
+        const essays = this.params.essays;
+        const lecture = this.params.lecture;
+        const new_coincidences = {}
+        for (let i = 0; i < essays.length; i++) {
+            const new_coincidence = {}
+            for (let text_id in essays[i].coincidence) {
+                let int_id = parseInt(text_id)
+                if (int_id === 0) {
+                    new_coincidence[text_id] = {
+                        "text": lecture.text,
+                        "author_borders": essays[i].coincidence[text_id],
+                        "target_borders": lecture.coincidence[String(i + 1)]
+                    }
+                } else {
+                    new_coincidence[text_id] = {
+                        "text": essays[int_id - 1].text,
+                        "author_borders": essays[i].coincidence[text_id],
+                        "target_borders": essays[int_id - 1].coincidence[String(i + 1)]
+                    }
+                }
+            }
+
+            new_coincidences[i] = new_coincidence;
+        }
+        for (let essay_id in new_coincidences) {
+            this.params.essays[essay_id].coincidence = new_coincidences[essay_id];
+        }
+    }
+
     @action endEvaluation() {
         estimatorService.endEvaluation({essays: this.params.essays, lecture: this.params.lecture})
             .then(resolve => {})
@@ -151,11 +195,21 @@ class ReportStore {
                sheetEssays.push({
                    "Номер": index + 1,
                    "Автор": essay["author"] || '',
-                   "Оценка": this.convertGrade(essay["teacher_grade"] || essay["grade"])
+                   "Оценка": this.convertGrade(essay["teacher_grade"] || essay["grade"]),
+                   "Описание": this.getEssayDescription(essay)
                })
         });
 
         return sheetEssays;
+    }
+
+    getEssayDescription(essay) {
+        const text_labels = []
+        for (const label of essay.labels) {
+           text_labels.push(convertLabelToDescription(label))
+        }
+
+        return text_labels.join(', ')
     }
 
     convertGrade(grade) {

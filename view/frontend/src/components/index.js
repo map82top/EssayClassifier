@@ -11,3 +11,5 @@ export { default as ControlsGroup } from "./ControlsGroup/index.jsx";
 export { default as  EssayGroupPanel } from "./EssayGroupPanel/index.jsx";
 export { default as  ActionPanel } from "./ActionPanel/index.jsx";
 export { default as  TextContainer } from "./TextContainer/index.jsx";
+export { default as  Tag } from "./Tag/index.jsx";
+export { default as  TagContainer } from "./TagContainer/index.jsx";

@@ -1,3 +1,5 @@
+import json
+
 import nltk
 from storage.schema import *
 from analyzer.supervisor import Supervisor
@@ -32,7 +34,7 @@ class Analyzer:
 
         essays_list = [self.supervisor.markup(essay) for essay in essays_list]
 
-        plagiarism_matrix = create_plagiarism_matrix(essays_list)
+        plagiarism_matrix, coincidences = create_plagiarism_matrix(essays_list)
         similarity_matrix = create_similarity_matrix(essays_list)
 
         groups = self.find_similarity_groups_by_rows(similarity_matrix)
@@ -42,28 +44,29 @@ class Analyzer:
 
         for i, essay in enumerate(essays_list):
             if i == 0:
-                lecture = self.handle_lecture(essay)
+                lecture = self.handle_lecture(essay, coincidences[i])
             else:
-                self.handle_essay(i, essay, graded_essays, groups[i], similarity_matrix, plagiarism_matrix, essays.loc[i - 1, :])
+                self.handle_essay(i, essay, graded_essays, groups[i], similarity_matrix,
+                                  plagiarism_matrix, essays.loc[i - 1, :], coincidences[i])
 
         return Report(
             lecture=lecture,
             essays=graded_essays
         )
 
-
-    def handle_lecture(self, lecture):
+    def handle_lecture(self, lecture, coincidence):
         return Lecture(
             text=lecture.text,
             statistic=Statistic(
                 num_letters=lecture.num_letters,
                 num_words=lecture.num_words,
                 num_sentences=lecture.num_sentences
-            )
+            ),
+            coincidence=json.dumps(coincidence)
         )
 
-
-    def handle_essay(self, index, essay, graded_essays, group, similarity_matrix, plagiarism_matrix, real_record):
+    def handle_essay(self, index, essay, graded_essays, group, similarity_matrix,
+                     plagiarism_matrix, real_record, coincidence):
         real_essay_index = index - 1
         author = ''
         if 'author' in real_record:
@@ -126,6 +129,7 @@ class Analyzer:
         db_essay.group = group
         db_essay.labels = labels
         db_essay.author = author
+        db_essay.coincidence = json.dumps(coincidence)
         db_essay.statistic = Statistic(
                 num_letters=essay.num_letters,
                 num_words=essay.num_words,

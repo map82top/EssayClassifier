@@ -69,18 +69,18 @@ class PlagiarismTest(unittest.TestCase):
     def test_create_plagiarism_matrix(self):
         essays = self.test_data["plagiarism_test_essays"]
         essays = [self.supervisor.markup(essay) for essay in essays]
-        result = plagiarism.create_plagiarism_matrix(essays)
+        matrix, coincidences = plagiarism.create_plagiarism_matrix(essays)
 
-        self.assertEqual((result.shape == np.array([len(essays), len(essays)])).all(), True)
+        self.assertEqual((matrix.shape == np.array([len(essays), len(essays)])).all(), True)
         # для полюсного эссе номер 1
-        self.assertEqual(result[0, 1] == 100, True) # эссе имеет сходство по 100% предолжений
-        self.assertEqual(result[0, 2] > 33 and result[0, 2] < 65, True) # эссе имеет сходство по 50% предолжений
-        self.assertEqual(result[0, 3] == 0, True)
+        self.assertEqual(matrix[0, 1] == 100, True) # эссе имеет сходство по 100% предолжений
+        self.assertEqual(matrix[0, 2] > 33 and matrix[0, 2] < 65, True) # эссе имеет сходство по 50% предолжений
+        self.assertEqual(matrix[0, 3] == 0, True)
 
         # для полюсного эссе номер 2
-        self.assertEqual(result[3, 0] == 0, True)
-        self.assertEqual(result[3, 1] == 0, True) # эссе имеет сходство по 0% предолжений
-        self.assertEqual(result[3, 2] > 35 and result[3, 2] < 65, True) # эссе имеет сходство по 50% предолжений
+        self.assertEqual(matrix[3, 0] == 0, True)
+        self.assertEqual(matrix[3, 1] == 0, True) # эссе имеет сходство по 0% предолжений
+        self.assertEqual(matrix[3, 2] > 35 and matrix[3, 2] < 65, True) # эссе имеет сходство по 50% предолжений
 
     def test_similarity_matrix(self):
         essays = self.test_data["similarity_test_essays"]

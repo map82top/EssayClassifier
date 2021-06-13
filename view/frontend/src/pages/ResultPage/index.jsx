@@ -127,7 +127,7 @@ const index = (props) => {
     }
 
     const createTagGroupDescription = (key) => {
-        let name = `Группа подобия ${key === "include" ? "содержит" : "не содержит" }`;
+        let name = `Группа ${key === "include" ? "содержит" : "не содержит" }`;
         return (
              <div className="group-custom-header">
                  <div className="group-custom-header-name">{name}</div>

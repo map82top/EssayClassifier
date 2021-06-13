@@ -75,7 +75,6 @@
     "rc-resize-observer": "^1.0.0",
     "react": "^16.8.0",
     "react-dom": "^16.0.1",
-    "react-process-string": "^1.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-select": "^4.1.0",

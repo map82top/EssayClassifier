@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import cn from "classnames";
-import { Tag, Checkbox } from "antd";
 import { RightOutlined} from "@ant-design/icons";
 import "./_style.scss";
 import { observer, inject } from "mobx-react";
-import { Button, Collapse, TextContainer } from "../../components";
-import { convertLectureTypeToColor, convertLabelToDescription } from "../../utils";
+import { Button, Collapse, TextContainer, TagContainer } from "../../components";
 
 const Essay = (props) => {
     const [open, setOpen] = useState(false);
-    const [lectureVisible, setLectureVisible] = useState(false);
+    const [comparing, setComparing] = useState({"visible": false,
+        "text": null, "author_coincidence": null, "target_coincidence": null});
 
    const createTextStyle = () => {
        return {
@@ -33,8 +32,25 @@ const Essay = (props) => {
         setOpen(!open);
     }
 
-    const showLectureHandler = (e) => {
-        setLectureVisible(!lectureVisible);
+    const checkedTagHandler = (tagIndex) => {
+        const newValue = {}
+
+        if (tagIndex != null) {
+            newValue["visible"] = true;
+            const label = props.essay.labels[tagIndex];
+            let reference = label.internal_reference ? label.internal_reference : 0;
+            const coincidence =  props.essay.coincidence[reference];
+            newValue["text"] = coincidence.text;
+            newValue["author_coincidence"] = coincidence.author_borders
+            newValue["target_coincidence"] = coincidence.target_borders
+
+        } else {
+            newValue["visible"] = false;
+            newValue["text"] = null;
+            newValue["author_coincidence"] = null;
+            newValue["target_coincidence"] = null;
+        }
+        setComparing(newValue);
     }
 
     const cutText = (text) => {
@@ -65,21 +81,10 @@ const Essay = (props) => {
                             isOpened={!open}
                             direction='horizontal'
                         >{cutText(props.essay.text)}</Collapse>
-                        <div className="essay-header-content-collapse-tags">
-                            {props.essay.labels.map(label => (
-                                <Tag color={convertLectureTypeToColor(label.type)} className="essay-header-content-collapse-tags-item">
-                                    {convertLabelToDescription(label)}
-                                </Tag>
-                            ))}
-                        </div>
-                    </div>
-                    <div className={cn("essay-header-content-control", {"control-visible": open})}>
-                        <Checkbox
-                            className={cn("essay-header-content-control-lecture-checkbox")}
-                            onChange={showLectureHandler}
-                        >
-                            Показать лекцию
-                        </Checkbox>
+                        <TagContainer
+                            labels={props.essay.labels}
+                            checkedHadler={checkedTagHandler}
+                        />
                     </div>
                 </div>
                 <div className={cn("essay-header-id")}>
@@ -93,18 +98,20 @@ const Essay = (props) => {
                 <div className={cn('essay-collapse-content')}>
                     <div className="essay-collapse-content-essay">
                         <TextContainer
-                            className={cn({"lecture-visible": lectureVisible})}
+                            className={cn({"comparing-visible": comparing.visible})}
                             style={createTextStyle()}
                             text={props.essay.text}
+                            coincidence={comparing.author_coincidence}
                         />
                     </div>
                     {
-                        lectureVisible ? (
-                            <div className={cn("essay-collapse-content-lecture", {"lecture-visible": lectureVisible})}>
+                        comparing.visible ? (
+                            <div className={cn("essay-collapse-content-lecture", {"comparing-visible": comparing.visible})}>
                                 <TextContainer
-                                    className={cn({"lecture-visible": lectureVisible})}
+                                    className={cn({"comparing-visible": comparing.visible})}
                                     style={createTextStyle()}
-                                    text={props.lecture.text}
+                                    text={comparing.text}
+                                    coincidence={comparing.target_coincidence}
                                 />
                             </div>
                         ) : ''

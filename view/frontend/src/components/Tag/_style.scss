@@ -1,0 +1,28 @@
+$bs-weight: 1px;
+$bs-radius: 2px;
+$bs-stretching: 2px;
+$bs-color: base-color('shadow');
+
+.tag {
+    //background-color: base-color('accent');
+    //color: base-color('text');
+    //border: none;
+    width: max-content;
+    height: max-content;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border-width: 1px;
+    //@include container-decoration();
+    //border-radius: $default-border-radius;
+    //margin: $default-container-margin;
+    //padding: 0.8rem;
+    //outline: none;
+
+    &:hover {
+        border-width: 1px;
+    }
+
+    &--checked {
+        border-width: 3px !important;
+    }
+}

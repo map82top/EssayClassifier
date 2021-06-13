@@ -38,6 +38,7 @@ const EssayGroupPanel = (props) => {
         { value: "TEACHER_FAIL" },
         { value: "LECTURE_PLAGIARISM" },
         { value: "ESSAY_PLAGIARISM" },
+        { value: "IGNORE" },
     ]
 
     return (

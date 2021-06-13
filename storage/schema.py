@@ -43,6 +43,7 @@ class Essay(Base):
     teacher_grade = Column(Enum(GradeType), nullable=True)
     group = Column(Integer)
     author = Column(Text, nullable=True)
+    coincidence = Column(Text, nullable=False)
 
     # relations
     report_id = Column(Integer, ForeignKey('report.id'))
@@ -50,17 +51,13 @@ class Essay(Base):
     statistic = relationship('Statistic', backref='essay')
 
 
-
-
-
-    # labels = relationship('Label', backref='essay')
-
 class Lecture(Base):
     __tablename__ = 'lecture'
 
     # field
     id = Column(Integer, primary_key=True)
     text = Column(Text)
+    coincidence = Column(Text, nullable=False)
 
     # relations
     statistic_id = Column(Integer, ForeignKey('statistic.id'))

@@ -1,0 +1,11 @@
+.tag-container {
+    margin: $default-container-margin;
+    width: $max-content-width;
+
+    &-item {
+      width: max-content;
+      height: max-content;
+      font-size: 1rem;
+      margin: $default-container-margin;
+    }
+}

@@ -7,6 +7,7 @@
             "id":1,
             "internal_id": 1,
             "statistic": {"num_letters": 150, "num_words": 50, "num_sentences": 6},
+            "coincidence": "{}",
             "author": "Иванов Иван Иванович",
             "labels":[
                 {"probability":null,"reference":null,"type":"SUCCESS"},
@@ -20,6 +21,7 @@
             "id":2,
             "internal_id": 2,
             "author": "Голубева Альбина Николаевна",
+            "coincidence": "{}",
             "statistic": {"num_letters": 230, "num_words": 60, "num_sentences": 7},
             "labels":[{"probability":null,"reference":null,"type":"SUCCESS"}],
             "text":"Если человек живет, чтобы приносить людям добро, облегчать их страдания, давать людям радость, то он оценивает себя на уровне этой своей человечности. Он ставит себе цель, достойную человека."
@@ -30,6 +32,7 @@
             "id":3,
             "internal_id": 3,
             "author": "Голубева Альбина Николаевна",
+            "coincidence": "{\"0\":[[10,15], [20,25]], \"5\":[[0,10]]}",
             "statistic": {"num_letters": 320, "num_words": 80, "num_sentences": 9},
             "labels":[
                 {"probability":null,"reference":null,"type":"FAIL"},
@@ -46,6 +49,7 @@
             "internal_id": 4,
             "author": "Смирнова Ольга Вячеславовна",
             "statistic": {"num_letters": 242, "num_words": 76, "num_sentences": 5},
+            "coincidence": "{\"0\":[[0,15]]}",
             "labels":[
                 {"probability":null,"reference":null,"type":"SUCCESS"},
                 {"probability":null,"reference":null,"type":"ATTENTION"},
@@ -60,6 +64,7 @@
             "internal_id": 5,
             "author": "Борисов Евгений Анатольевич",
             "statistic": {"num_letters": 234, "num_words": 70, "num_sentences": 10},
+            "coincidence": "{\"0\":[[0,15]], \"3\":[[0,10], [11, 14]]}",
             "labels":[
                 {"probability":null,"reference":null,"type":"FAIL"},
                 {"probability":0.76,"reference":null,"type":"LECTURE_PLAGIARISM"},
@@ -74,6 +79,7 @@
             "internal_id": 6,
             "author": "Зубенко Владимир Константинович",
             "statistic": {"num_letters": 80, "num_words": 10, "num_sentences": 1},
+            "coincidence": "{}",
             "labels":[
                 {"probability":null,"reference":null,"type":"IGNORE"}
             ],
@@ -82,6 +88,7 @@
     "lecture":{
         "id":1,
         "statistic": {"num_letters": 198, "num_words": 55, "num_sentences": 6},
+        "coincidence": "{\"5\":[[0,15]], \"3\":[[0,10], [11, 14]], \"4\":[[0,10], [11, 14]]}",
         "text":"Жизнь - прежде всего творчество, но это не значит, что каждый человек, чтобы жить, должен родиться художником, балериной или ученым. Можно творить просто добрую атмосферу вокруг себя. Человек может принести с собой атмосферу подозрительности, какого-то тягостного молчания, а может внести сразу радость, свет. Вот это и есть творчество."
     }
 }
